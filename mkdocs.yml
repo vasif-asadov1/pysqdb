@@ -1,0 +1,42 @@
+site_name: sqpy Documentation
+site_description: A powerful and minimalist data package combining DuckDB SQL engine with Easy-to-use Python interface for efficient data manipulation and analysis. Fast as DuckDB, Simple as Pandas.
+site_author: Vasif Asadov
+
+# Ana Tema Ayarları
+theme:
+  name: material
+  features:
+    - navigation.sections      # Sol menüyü kategorize eder
+    - navigation.top           # Yukarı çıkma butonu
+    - toc.follow               # Sağdaki sticky TOC sen scroll yaptıkça takip eder
+    - content.code.copy        # Kod bloklarına kopyalama butonu ekler
+  palette:
+    # Koyu Tema Varsayılan
+    - scheme: slate
+      primary: black
+      accent: pink
+
+# Navigasyon (Sol Sidebar Sıralaması)
+nav:
+  - Home: index.md
+  - API Reference: api.md
+
+# Eklentiler
+plugins:
+  - search                     # Arama çubuğu
+  - mkdocstrings:              # Python kodlarından doküman çekmek için
+      handlers:
+        python:
+          paths: [.]           # sqpy klasörünü bulabilmesi için
+          options:
+            show_source: true  # Dökümanda kaynak kodu göster butonu
+
+# Markdown ve Kod Renklendirme Ayarları
+markdown_extensions:
+  - toc:
+      permalink: true          # Başlıklara link verebilme
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences

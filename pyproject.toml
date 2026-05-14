@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysqdb"
+version = "0.1.0"
+description = "DuckDB powered, dictionary-based advanced data engineering and EDA library."
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "Vasif Asadov"}
+]
+dependencies = [
+    "duckdb>=0.9.0",
+    "pandas>=1.5.0"
+]
+
+# PyPI sayfasında sol tarafta görünecek faydalı linkler (GitHub linkini buraya ekleyebilirsin)
+[project.urls]
+Homepage = "https://github.com/vasifasadov/sqpy"
+Issues = "https://github.com/vasifasadov/sqpy/issues"
+
+# İşte o meşhur "Temizlik" ayarı: 
+# Sadece 'sqpy' klasörünü alır; data, tests, docs gibi senin lokalindeki klasörleri dışlar.
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pysqdb*"]
+exclude = ["data*", "tests*", "docs*", "venv*", ".*"]
