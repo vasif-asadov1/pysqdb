@@ -4,7 +4,7 @@ The `summarize` function is the crown jewel of `pysqdb`'s analytical tools. It a
 
 This function is designed to replace hours of manual SQL writing with a single, declarative Python dictionary structure.
 
-## `ps.summarize(tables, on, join_types=None, columns=None, aggregations=None, order_by=None, create_table=None, create_view=None, return_df=True)`
+**`ps.summarize(tables, on, join_types=None, columns=None, aggregations=None, order_by=None, create_table=None, create_view=None, return_df=True)`**
 
 ### Key Features
 
@@ -23,9 +23,9 @@ This function is designed to replace hours of manual SQL writing with a single, 
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. Building a Global Sales Dashboard
+**1. Building a Global Sales Dashboard**
 
 Instead of writing 20 lines of SQL, define your dimensions and metrics in a clean dictionary.
 
@@ -52,7 +52,7 @@ summary_df = ps.summarize(
 
 ```
 
-#### 2. Advanced Performance Reporting
+**2. Advanced Performance Reporting**
 
 Join tables and save the result as a "View" for your visualization tools, while keeping a sample in a DataFrame for immediate check.
 
@@ -88,7 +88,7 @@ Window functions are essential for complex data analysis where you need to compa
 
 This is your go-to tool for rolling averages, cumulative totals, percentiles, and row-over-row growth metrics.
 
-## `ps.window(table, operations, partition_by=None, order_by=None, frame_clause=None, create_table=None, create_view=None, return_df=True)`
+**`ps.window(table, operations, partition_by=None, order_by=None, frame_clause=None, create_table=None, create_view=None, return_df=True)`**
 
 ### Key Features
 
@@ -107,9 +107,9 @@ This is your go-to tool for rolling averages, cumulative totals, percentiles, an
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. Calculating Daily Growth & Rolling Averages
+**1. Calculating Daily Growth & Rolling Averages**
 
 In finance and e-commerce, seeing the trend is more important than seeing a single point.
 
@@ -131,7 +131,7 @@ time_series_df = ps.window(
 
 ```
 
-#### 2. Advanced Ranking & Percentiles
+**2. Advanced Ranking & Percentiles**
 
 Perfect for leaderboards or identifying high-value customer segments within each region.
 
@@ -149,7 +149,8 @@ ps.window(
 
 ```
 
-#### 3. Cumulative Sums (Running Totals)
+
+**3. Cumulative Sums (Running Totals)**
 
 Track how your metrics accumulate over time without losing individual transaction details.
 
@@ -165,9 +166,9 @@ ps.window(
 
 ---
 
-### Why use sqpy's window function?
+### Why use pysqdb's window function?
 
-1. **Safety First:** Building `OVER (PARTITION BY ... ORDER BY ... ROWS BETWEEN ...)` strings manually is a major source of SQL bugs. `sqpy` builds this safely for you.
+1. **Safety First:** Building `OVER (PARTITION BY ... ORDER BY ... ROWS BETWEEN ...)` strings manually is a major source of SQL bugs. `pysqdb` builds this safely for you.
 2. **Speed:** DuckDB's window function implementation is world-class, often outperforming equivalent Pandas `.rolling()` or `.expanding()` operations on larger-than-memory datasets.
 3. **Data Integrity:** Because the function starts with `SELECT *`, you never lose context—your original data remains untouched, just enriched with new insights.
 
@@ -177,7 +178,7 @@ ps.window(
 
 ## Conclusion: The Analytical Powerhouse
 
-By mastering the Summarization and Window functions, you have unlocked the full potential of `sqpy`. You are now capable of transforming raw, messy data into high-level business intelligence and complex time-series insights without leaving the comfort of your Python environment.
+By mastering the Summarization and Window functions, you have unlocked the full potential of `pysqdb`. You are now capable of transforming raw, messy data into high-level business intelligence and complex time-series insights without leaving the comfort of your Python environment.
 
 These functions represent the bridge between raw data engineering and high-end data science, powered by the unmatched performance of the DuckDB engine.
 
@@ -201,6 +202,6 @@ To further support machine learning workflows, future updates will include:
 * **Scaling & Normalization:** SQL-based Min-Max and Z-score scaling for multi-billion row datasets.
 * **String Manipulation Suite:** Advanced fuzzy matching and regex tools for cleaning text data at scale.
 
-We are committed to making `sqpy` the fastest and most intuitive data wrangling library in the Python ecosystem. Stay tuned for these updates!
+We are committed to making `pysqdb` the fastest and most intuitive data wrangling library in the Python ecosystem. Stay tuned for these updates!
 
 

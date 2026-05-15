@@ -1,0 +1,1325 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A powerful and minimalist data package combining DuckDB SQL engine with Easy-to-use Python interface for efficient data manipulation and analysis. Fast as DuckDB, Simple as Pandas.">
+      
+      
+        <meta name="author" content="Vasif Asadov">
+      
+      
+      
+        <link rel="prev" href="../02_io_operations/">
+      
+      
+        <link rel="next" href="../04_join_filters/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Data Cleaning - pysqdb Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="pink">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data-cleaning-operations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="pysqdb Documentation" class="md-header__button md-logo" aria-label="pysqdb Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pysqdb Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Data Cleaning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="pink"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="pysqdb Documentation" class="md-nav__button md-logo" aria-label="pysqdb Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    pysqdb Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_io_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Operations & I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Cleaning
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Cleaning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-impute-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The impute Function
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#psimputetable-column-methodmean-fixed_constnone-return_dffalse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.impute(table, column, method="mean", fixed_const=None, return_df=False)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.impute(table, column, method=&#34;mean&#34;, fixed_const=None, return_df=False)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-filling-numerical-gaps-with-the-average" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Filling Numerical Gaps with the Average
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-handling-categorical-data-with-a-fixed-constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Handling Categorical Data with a Fixed Constant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-using-the-mode-most-frequent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Using the Mode (Most Frequent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#built-in-type-safety-the-sqpy-shield" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in Type Safety (The "SqPy" Shield)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-tip-when-to-use-return_dftrue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Tip: When to use return_df=True?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_join_filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relational Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_summary_windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-impute-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The impute Function
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#psimputetable-column-methodmean-fixed_constnone-return_dffalse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.impute(table, column, method="mean", fixed_const=None, return_df=False)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.impute(table, column, method=&#34;mean&#34;, fixed_const=None, return_df=False)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-filling-numerical-gaps-with-the-average" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Filling Numerical Gaps with the Average
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-handling-categorical-data-with-a-fixed-constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Handling Categorical Data with a Fixed Constant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-using-the-mode-most-frequent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Using the Mode (Most Frequent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#built-in-type-safety-the-sqpy-shield" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in Type Safety (The "SqPy" Shield)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-tip-when-to-use-return_dftrue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Tip: When to use return_df=True?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="data-cleaning-operations">Data Cleaning Operations<a class="headerlink" href="#data-cleaning-operations" title="Permanent link">&para;</a></h1>
+<p>The <code>Data Cleaning</code> pillar is where your raw, messy data gets transformed into a polished, analysis-ready asset. This section includes functions for handling missing values, outliers, duplicates, and even physical data ordering. Each function is designed to operate directly within the DuckDB engine, ensuring that you can clean datasets of any size without worrying about memory constraints.</p>
+<h2 id="the-impute-function">The <code>impute</code> Function<a class="headerlink" href="#the-impute-function" title="Permanent link">&para;</a></h2>
+<p>Missing data (NULLs) can bias your analysis and crash your machine learning models. The <code>impute</code> function provides an elegant, SQL-native way to fill these gaps using statistical measures or fixed constants.</p>
+<p>Unlike Pandas, which often creates a copy of the entire dataset in RAM, <code>pysqdb</code> performs an <strong>In-Place Update</strong> directly within the database. This means you can clean multi-gigabyte tables without breaking a sweat.</p>
+<h2 id="psimputetable-column-methodmean-fixed_constnone-return_dffalse"><code>ps.impute(table, column, method="mean", fixed_const=None, return_df=False)</code><a class="headerlink" href="#psimputetable-column-methodmean-fixed_constnone-return_dffalse" title="Permanent link">&para;</a></h2>
+<h3 id="how-it-works"><strong>How it works:</strong><a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
+<p>The function analyzes the column, calculates the requested statistic (mean, median, or mode), and runs a highly optimized <code>UPDATE</code> query to fill only the missing values.</p>
+<h3 id="parameters"><strong>Parameters:</strong><a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>table</code> (str):</strong> The name of the table to update.</li>
+<li><strong><code>column</code> (str):</strong> The specific column containing NULL values.</li>
+<li><strong><code>method</code> (str):</strong></li>
+<li><code>"mean"</code>: Fills with the mathematical average (Numeric only).</li>
+<li><code>"median"</code>: Fills with the middle value (Numeric only).</li>
+<li><code>"mode"</code>: Fills with the most frequent value (Great for Categorical data).</li>
+<li>
+<p><code>"fixed_const"</code>: Fills with a specific value provided in <code>fixed_const</code>.</p>
+</li>
+<li>
+<p><strong><code>fixed_const</code> (any, optional):</strong> Required only if <code>method="fixed_const"</code>. Includes built-in type checking (e.g., won't let you put a string in a numeric column).</p>
+</li>
+<li><strong><code>return_df</code> (bool):</strong> If <code>True</code>, returns the updated table as a Pandas DataFrame for immediate inspection.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples"><strong>Pro Usage Examples</strong><a class="headerlink" href="#pro-usage-examples" title="Permanent link">&para;</a></h3>
+<h4 id="1-filling-numerical-gaps-with-the-average"><strong>1. Filling Numerical Gaps with the Average</strong><a class="headerlink" href="#1-filling-numerical-gaps-with-the-average" title="Permanent link">&para;</a></h4>
+<p>Perfect for columns like <code>age</code> or <code>price</code> where the mean is a safe statistical bet.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Replace NULLs in &#39;budget&#39; with the average budget of all movies</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;budget&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-handling-categorical-data-with-a-fixed-constant"><strong>2. Handling Categorical Data with a Fixed Constant</strong><a class="headerlink" href="#2-handling-categorical-data-with-a-fixed-constant" title="Permanent link">&para;</a></h4>
+<p>When a value is missing in a category, you might want to label it as "Unknown".</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Fills NULL genres with the string &quot;Unknown&quot;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># pysqdb automatically validates that &#39;genre&#39; is a string-type column!</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> 
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>          <span class="n">column</span><span class="o">=</span><span class="s2">&quot;genre&quot;</span><span class="p">,</span> 
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fixed_const&quot;</span><span class="p">,</span> 
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>          <span class="n">fixed_const</span><span class="o">=</span><span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="3-using-the-mode-most-frequent"><strong>3. Using the Mode (Most Frequent)</strong><a class="headerlink" href="#3-using-the-mode-most-frequent" title="Permanent link">&para;</a></h4>
+<p>For features like <code>country</code> or <code>language</code>, using the most common value is often the best strategy.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">ps</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;original_language&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mode&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="built-in-type-safety-the-sqpy-shield"><strong>Built-in Type Safety (The "SqPy" Shield)</strong><a class="headerlink" href="#built-in-type-safety-the-sqpy-shield" title="Permanent link">&para;</a></h3>
+<p>Your code includes a rigorous validation layer. If you try to impute a numeric column with a string, <code>pysqdb</code> catches it before the database throws an error:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># This will raise a TypeError: Column &#39;revenue&#39; is numeric. &#39;fixed_const&#39; cannot be a string.</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">impute</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fixed_const&quot;</span><span class="p">,</span> <span class="n">fixed_const</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="pro-tip-when-to-use-return_dftrue"><strong>Pro Tip: When to use <code>return_df=True</code>?</strong><a class="headerlink" href="#pro-tip-when-to-use-return_dftrue" title="Permanent link">&para;</a></h3>
+<p>In large production pipelines, keep <code>return_df=False</code> (default) to keep the memory footprint at zero. Use <code>return_df=True</code> only during EDA (Exploratory Data Analysis) in a Jupyter Notebook to see the results immediately.</p>
+<hr />
+<h1 id="the-remove_outliers-function-precision-cleaning">The <code>remove_outliers</code> Function: Precision Cleaning<a class="headerlink" href="#the-remove_outliers-function-precision-cleaning" title="Permanent link">&para;</a></h1>
+<p>Extreme values (outliers) can heavily distort your statistical averages and mislead your machine learning models. The <code>remove_outliers</code> function uses the industry-standard <strong>IQR (Interquartile Range)</strong> method to identify and surgically remove these anomalies directly from your SQL tables.</p>
+<p>By leveraging DuckDB's native quantile functions, <code>pysqdb</code> performs these complex calculations at blazing speeds without ever needing to load the full dataset into your computer's memory.</p>
+<h2 id="psremove_outlierstable-columns-return_dffalse"><code>ps.remove_outliers(table, columns, return_df=False)</code><a class="headerlink" href="#psremove_outlierstable-columns-return_dffalse" title="Permanent link">&para;</a></h2>
+<h3 id="the-math-behind-the-magic"><strong>The Math Behind the Magic:</strong><a class="headerlink" href="#the-math-behind-the-magic" title="Permanent link">&para;</a></h3>
+<p>The function calculates the 25th percentile ($Q1$) and the 75th percentile ($Q3$) for each column. It then defines the "Normal Range" as:</p>
+<ul>
+<li><strong>Lower Bound:</strong> $Q1 - 1.5 \times IQR$</li>
+<li><strong>Upper Bound:</strong> $Q3 + 1.5 \times IQR$
+Any data point outside these bounds is automatically deleted from the table.</li>
+</ul>
+<h3 id="parameters_1"><strong>Parameters:</strong><a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>table</code> (str):</strong> The name of the table to clean.</li>
+<li><strong><code>columns</code> (str or list):</strong> A single column name or a list of numerical columns to check.</li>
+<li><strong><code>return_df</code> (bool):</strong> If <code>True</code>, returns the updated table as a Pandas DataFrame.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_1"><strong>Pro Usage Examples</strong><a class="headerlink" href="#pro-usage-examples_1" title="Permanent link">&para;</a></h3>
+<h4 id="1-cleaning-a-single-column"><strong>1. Cleaning a Single Column</strong><a class="headerlink" href="#1-cleaning-a-single-column" title="Permanent link">&para;</a></h4>
+<p>Perfect for removing impossible values in columns like <code>price</code> or <code>delivery_time</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Remove extreme outliers from the revenue column</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;sales&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;revenue&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-batch-cleaning-multiple-features"><strong>2. Batch Cleaning Multiple Features</strong><a class="headerlink" href="#2-batch-cleaning-multiple-features" title="Permanent link">&para;</a></h4>
+<p>You can clean an entire set of numerical features in one line. <code>pysqdb</code> will automatically skip any non-numerical columns you might have accidentally included and warn you about them.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Clean multiple columns at once</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">,</span> <span class="s2">&quot;runtime&quot;</span><span class="p">,</span> <span class="s2">&quot;popularity&quot;</span><span class="p">])</span>
+</span></code></pre></div>
+<h4 id="3-real-time-inspection"><strong>3. Real-Time Inspection</strong><a class="headerlink" href="#3-real-time-inspection" title="Permanent link">&para;</a></h4>
+<p>In a Jupyter Notebook, you might want to see how many rows are left after the cleanup.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Clean and immediately see the resulting DataFrame</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">clean_df</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="s2">&quot;inventory&quot;</span><span class="p">,</span> <span class="s2">&quot;stock_count&quot;</span><span class="p">,</span> <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Remaining rows: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clean_df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="smart-safeguards"><strong>Smart Safeguards</strong><a class="headerlink" href="#smart-safeguards" title="Permanent link">&para;</a></h3>
+<p>Your code isn't just fast; it's smart. It includes internal checks to prevent common errors:</p>
+<ul>
+<li><strong>Categorical Detection:</strong> If you pass a column containing text (like <code>movie_title</code>), <code>pysqdb</code> will issue a warning and skip it rather than crashing.</li>
+<li><strong>Null Safety:</strong> It automatically handles columns with missing values by ignoring <code>NULL</code> entries during the quantile calculation.</li>
+</ul>
+<h3 id="pro-tip-use-with-caution"><strong>Pro Tip: Use with Caution!</strong><a class="headerlink" href="#pro-tip-use-with-caution" title="Permanent link">&para;</a></h3>
+<p>Outlier removal is a permanent <code>DELETE</code> operation in your database.</p>
+<blockquote>
+<p><strong>Best Practice:</strong> Always run <code>ps.give_info(table)</code> before and after removing outliers to see how the distribution (Min/Max/Mean) has shifted!</p>
+</blockquote>
+<hr />
+<h1 id="the-clip_outliers-function-soft-cleaning-winsorization">The <code>clip_outliers</code> Function: Soft-Cleaning (Winsorization)<a class="headerlink" href="#the-clip_outliers-function-soft-cleaning-winsorization" title="Permanent link">&para;</a></h1>
+<p>Sometimes, deleting data is too aggressive. When you want to keep all your rows but need to "tame" extreme values that skew your model, <code>clip_outliers</code> is your best friend.</p>
+<p>Instead of removing rows, this function <strong>winsorizes</strong> them: it sets values above the upper bound to the maximum "normal" value and values below the lower bound to the minimum "normal" value.</p>
+<h2 id="psclip_outlierstable-columns-return_dffalse"><code>ps.clip_outliers(table, columns, return_df=False)</code><a class="headerlink" href="#psclip_outlierstable-columns-return_dffalse" title="Permanent link">&para;</a></h2>
+<h3 id="how-it-works_1"><strong>How it works:</strong><a class="headerlink" href="#how-it-works_1" title="Permanent link">&para;</a></h3>
+<p>Using the <strong>IQR method</strong> ($Q1 - 1.5 \times IQR$ and $Q3 + 1.5 \times IQR$), <code>pysqdb</code> identifies the normal boundaries. It then uses a highly efficient SQL <code>UPDATE</code> combined with <code>LEAST</code> and <code>GREATEST</code> functions to compress extreme values into this range.</p>
+<h3 id="parameters_2"><strong>Parameters:</strong><a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>table</code> (str):</strong> The table to be updated.</li>
+<li><strong><code>columns</code> (str or list):</strong> The numerical column(s) to be clipped.</li>
+<li><strong><code>return_df</code> (bool):</strong> If <code>True</code>, returns the updated table as a DataFrame.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_2"><strong>Pro Usage Examples</strong><a class="headerlink" href="#pro-usage-examples_2" title="Permanent link">&para;</a></h3>
+<h4 id="1-preserving-data-size"><strong>1. Preserving Data Size</strong><a class="headerlink" href="#1-preserving-data-size" title="Permanent link">&para;</a></h4>
+<p>If you have a small dataset and cannot afford to lose any rows, use <code>clip</code> instead of <code>remove</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Keep all rows, but cap the &#39;salary&#39; column at statistical bounds</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">clip_outliers</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;employees&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;salary&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-preparing-features-for-linear-models"><strong>2. Preparing Features for Linear Models</strong><a class="headerlink" href="#2-preparing-features-for-linear-models" title="Permanent link">&para;</a></h4>
+<p>Linear regression and many neural networks are sensitive to the magnitude of outliers. Clipping helps them converge faster and produce more stable coefficients.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Clip outliers in multiple features simultaneously</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">clip_outliers</span><span class="p">(</span><span class="s2">&quot;housing_data&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;square_feet&quot;</span><span class="p">,</span> <span class="s2">&quot;lot_size&quot;</span><span class="p">,</span> <span class="s2">&quot;price&quot;</span><span class="p">])</span>
+</span></code></pre></div>
+<h4 id="3-handling-extreme-percentiles"><strong>3. Handling Extreme Percentiles</strong><a class="headerlink" href="#3-handling-extreme-percentiles" title="Permanent link">&para;</a></h4>
+<p>Since this function updates the table <strong>in-place</strong>, it is incredibly memory-efficient for large-scale data preprocessing.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Clip and check the new Max/Min values</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">clip_outliers</span><span class="p">(</span><span class="s2">&quot;sensor_readings&quot;</span><span class="p">,</span> <span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">give_info</span><span class="p">(</span><span class="s2">&quot;sensor_readings&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="technical-brilliance-the-sql-logic"><strong>Technical Brilliance: The SQL Logic</strong><a class="headerlink" href="#technical-brilliance-the-sql-logic" title="Permanent link">&para;</a></h3>
+<p>Under the hood, <code>pysqdb</code> executes a sophisticated SQL update:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">UPDATE</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">column</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LEAST</span><span class="p">(</span><span class="n">GREATEST</span><span class="p">(</span><span class="k">column</span><span class="p">,</span><span class="w"> </span><span class="n">lower_bound</span><span class="p">),</span><span class="w"> </span><span class="n">upper_bound</span><span class="p">)</span>
+</span></code></pre></div>
+<p>This ensures that:</p>
+<ul>
+<li>Values <strong>lower</strong> than the bound are raised to the <code>lower_bound</code>.</li>
+<li>Values <strong>higher</strong> than the bound are lowered to the <code>upper_bound</code>.</li>
+<li>Values already in the <strong>normal range</strong> remain untouched.</li>
+</ul>
+<h3 id="pro-tip-when-to-remove-vs-clip"><strong>Pro Tip: When to "Remove" vs "Clip"?</strong><a class="headerlink" href="#pro-tip-when-to-remove-vs-clip" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Remove:</strong> When the outliers are likely data entry errors or "noise" that shouldn't exist.</li>
+<li><strong>Clip:</strong> When the outliers are real data points but their extreme magnitude would negatively dominate your statistical model.</li>
+</ul>
+<hr />
+<h1 id="the-show_duplicates-function-the-data-detective">The <code>show_duplicates</code> Function: The Data Detective<a class="headerlink" href="#the-show_duplicates-function-the-data-detective" title="Permanent link">&para;</a></h1>
+<p>Before you delete data, you need to see it. While standard tools often provide a simple count of duplicates, <code>show_duplicates</code> performs a deep forensic analysis of your table. It identifies <strong>every single occurrence</strong> of identical rows, groups them together, and labels them so you can understand exactly where your data pipeline is leaking.</p>
+<p>By using DuckDB’s advanced window functions and the <code>QUALIFY</code> clause, <code>pysqdb</code> identifies duplicates across all columns simultaneously without the need for complex self-joins.</p>
+<h2 id="psshow_duplicatestable"><code>ps.show_duplicates(table)</code><a class="headerlink" href="#psshow_duplicatestable" title="Permanent link">&para;</a></h2>
+<h3 id="how-it-works_2"><strong>How it works:</strong><a class="headerlink" href="#how-it-works_2" title="Permanent link">&para;</a></h3>
+<p>The function partitions the data by <strong>every single column</strong> in your table. It then calculates a dynamic <code>_duplicate_count</code> for each row. If a row appears more than once, it is captured and displayed alongside its "twins."</p>
+<h3 id="what-it-returns"><strong>What it returns:</strong><a class="headerlink" href="#what-it-returns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>pandas.DataFrame</code>:</strong> A dataframe containing only the rows that have at least one exact duplicate.</li>
+<li><strong><code>_duplicate_count</code>:</strong> A temporary column added to the result showing how many times that specific row exists in the original table.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_3"><strong>Pro Usage Examples</strong><a class="headerlink" href="#pro-usage-examples_3" title="Permanent link">&para;</a></h3>
+<h4 id="1-identifying-data-integrity-issues"><strong>1. Identifying Data Integrity Issues</strong><a class="headerlink" href="#1-identifying-data-integrity-issues" title="Permanent link">&para;</a></h4>
+<p>Perfect for checking if a data ingestion script accidentally ran twice or if a join operation created a "Cartesian product" mess.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># Connect to your database</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;production_db&quot;</span><span class="p">)</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1"># Find and inspect all duplicates in the &#39;orders&#39; table</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="n">duplicates_df</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">show_duplicates</span><span class="p">(</span><span class="s2">&quot;orders&quot;</span><span class="p">)</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="c1"># If duplicates exist, they will be sorted so you can compare them row-by-row</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">duplicates_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</span></code></pre></div>
+<h4 id="2-quick-sanity-check-before-analysis"><strong>2. Quick Sanity Check Before Analysis</strong><a class="headerlink" href="#2-quick-sanity-check-before-analysis" title="Permanent link">&para;</a></h4>
+<p>Use this as a gatekeeper function. If <code>show_duplicates</code> returns an empty dataframe, you know your dataset is unique and ready for modeling.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># A clean table returns an empty DF and a helpful message</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">show_duplicates</span><span class="p">(</span><span class="s2">&quot;customers&quot;</span><span class="p">)</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Output: No duplicates found in table &#39;customers&#39;.</span>
+</span></code></pre></div>
+<hr />
+<h3 id="technical-brilliance-the-qualify-clause"><strong>Technical Brilliance: The <code>QUALIFY</code> Clause</strong><a class="headerlink" href="#technical-brilliance-the-qualify-clause" title="Permanent link">&para;</a></h3>
+<p>Your code utilizes one of DuckDB's most powerful features:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">_duplicate_count</span><span class="w"> </span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">FROM</span><span class="w"> </span><span class="k">table</span><span class="w"> </span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">QUALIFY</span><span class="w"> </span><span class="n">_duplicate_count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
+</span></code></pre></div>
+<p>This is significantly more efficient than the traditional SQL method (which requires a <code>GROUP BY</code> and a <code>JOIN</code> back to the original table). It allows <code>sqpy</code> to filter the results of a window function in a single pass over the data.</p>
+<h3 id="pro-tip-inspection-vs-action"><strong>Pro Tip: Inspection vs. Action</strong><a class="headerlink" href="#pro-tip-inspection-vs-action" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use <code>show_duplicates</code> to <strong>understand</strong> the scope of the problem.</li>
+<li>Once you’ve confirmed the duplicates are indeed errors, you can proceed to use our removal functions (like <code>drop_duplicates</code>) to sanitize the table permanently.</li>
+</ul>
+<hr />
+<h1 id="the-remove_duplicates-function-final-table-sanitization">The <code>remove_duplicates</code> Function: Final Table Sanitization<a class="headerlink" href="#the-remove_duplicates-function-final-table-sanitization" title="Permanent link">&para;</a></h1>
+<p>After inspecting your data with <code>show_duplicates</code>, it’s time to take action. The <code>remove_duplicates</code> function is designed to permanently clean your tables by eliminating redundant data.</p>
+<p>Whether you want to keep exactly one copy of every record or completely wipe out any row that has a "twin," <code>pysqdb</code> handles the operation directly within the database engine for maximum performance.</p>
+<h2 id="psremove_duplicatestable-keep_firstfalse-keep_lastfalse-return_dffalse"><code>ps.remove_duplicates(table, keep_first=False, keep_last=False, return_df=False)</code><a class="headerlink" href="#psremove_duplicatestable-keep_firstfalse-keep_lastfalse-return_dffalse" title="Permanent link">&para;</a></h2>
+<h3 id="the-two-cleaning-strategies"><strong>The Two Cleaning Strategies:</strong><a class="headerlink" href="#the-two-cleaning-strategies" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Keep None (<code>keep_first=False</code>, <code>keep_last=False</code>):</strong> This is the "Nuclear Option." It identifies rows that are duplicated and removes <strong>all</strong> occurrences of them, leaving only the rows that were truly unique from the start.</li>
+<li><strong>Keep One (<code>keep_first=True</code> OR <code>keep_last=True</code>):</strong> This is the "Standard Clean." It uses SQL <code>DISTINCT</code> logic to ensure that every unique row appears exactly once in your final table.</li>
+</ol>
+<h3 id="parameters_3"><strong>Parameters:</strong><a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>table</code> (str):</strong> The name of the table to clean.</li>
+<li><strong><code>keep_first</code> / <code>keep_last</code> (bool):</strong> Set one of these to <code>True</code> if you want to keep a single copy of each row.</li>
+<li><strong><code>return_df</code> (bool):</strong> If <code>True</code>, returns the cleaned table as a DataFrame.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_4"><strong>Pro Usage Examples</strong><a class="headerlink" href="#pro-usage-examples_4" title="Permanent link">&para;</a></h3>
+<h4 id="1-the-standard-cleanup-distinct"><strong>1. The Standard Cleanup (DISTINCT)</strong><a class="headerlink" href="#1-the-standard-cleanup-distinct" title="Permanent link">&para;</a></h4>
+<p>The most common use case: you have some redundant rows due to multiple data imports and you want a clean, unique table.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># Keeps exactly one copy of every unique row</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;customers&quot;</span><span class="p">,</span> <span class="n">keep_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-the-strict-cleanup-keep-only-truly-unique-rows"><strong>2. The Strict Cleanup (Keep Only Truly Unique Rows)</strong><a class="headerlink" href="#2-the-strict-cleanup-keep-only-truly-unique-rows" title="Permanent link">&para;</a></h4>
+<p>Use this when duplicates are considered "errors" and you don't trust any version of a duplicated row.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Removes all rows that appeared more than once.</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="c1"># If &#39;User_A&#39; appeared twice, &#39;User_A&#39; is completely gone.</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;transactions&quot;</span><span class="p">,</span> <span class="n">keep_first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="3-clean-and-inspect"><strong>3. Clean and Inspect</strong><a class="headerlink" href="#3-clean-and-inspect" title="Permanent link">&para;</a></h4>
+<p>Verify your row count immediately after the cleanup.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Clean and return as DataFrame</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">df_clean</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">(</span><span class="s2">&quot;web_logs&quot;</span><span class="p">,</span> <span class="n">keep_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset size after cleaning: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_clean</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="technical-brilliance-why-create-or-replace"><strong>Technical Brilliance: Why <code>CREATE OR REPLACE</code>?</strong><a class="headerlink" href="#technical-brilliance-why-create-or-replace" title="Permanent link">&para;</a></h3>
+<p>Your code uses a very efficient SQL pattern:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">table</span>
+</span></code></pre></div>
+<p>By recreating the table within DuckDB, we avoid the overhead of individual <code>DELETE</code> statements. This "Bulk-Update" approach is significantly faster and results in a more compressed, optimized database file on your disk.</p>
+<h3 id="conclusion-data-cleaning-checklist"><strong>Conclusion: Data Cleaning Checklist</strong><a class="headerlink" href="#conclusion-data-cleaning-checklist" title="Permanent link">&para;</a></h3>
+<p>Now that you've mastered the Cleaning Pillar, your typical workflow should look like this:</p>
+<ol>
+<li><strong><code>give_info()</code></strong>: Spot the NULLs and outliers.</li>
+<li><strong><code>impute()</code></strong>: Fill the missing gaps.</li>
+<li><strong><code>clip_outliers()</code> / <code>remove_outliers()</code></strong>: Tame the extreme values.</li>
+<li><strong><code>show_duplicates()</code></strong>: Inspect for redundancies.</li>
+<li><strong><code>remove_duplicates()</code></strong>: Finalize and seal the table.</li>
+</ol>
+<hr />
+<h2 id="the-sort_table-function-physical-data-ordering">The sort_table Function: Physical Data Ordering<a class="headerlink" href="#the-sort_table-function-physical-data-ordering" title="Permanent link">&para;</a></h2>
+<p>In data analysis, order matters. Whether you are preparing a dataset for time-series processing or simply want to organize your records by a specific metric, the <code>sort_table</code> function provides a permanent solution.</p>
+<p>Unlike temporary sorting in a DataFrame, <code>sqpy</code> re-organizes the data physically within the DuckDB engine. This ensures that any subsequent query, view, or export will respect the new sorted order without needing to re-apply the logic.</p>
+<h2 id="spsort_tabletable-by-ascendingtrue-return_dffalse"><code>sp.sort_table(table, by, ascending=True, return_df=False)</code><a class="headerlink" href="#spsort_tabletable-by-ascendingtrue-return_dffalse" title="Permanent link">&para;</a></h2>
+<h3 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Physical Persistance:</strong> Uses <code>CREATE OR REPLACE</code> logic to rewrite the table in the specified order.</li>
+<li><strong>Multi-Column Sorting:</strong> Sort by a single column or a prioritized list of multiple columns.</li>
+<li><strong>Mixed Sorting Directions:</strong> Pass a list of booleans to sort some columns ascending and others descending in a single operation.</li>
+<li><strong>In-Memory Optimization:</strong> Leverages DuckDB’s high-performance sorting algorithms to handle massive tables efficiently.</li>
+</ul>
+<h3 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>table (str):</strong> The name of the table to be sorted.</li>
+<li><strong>by (str or list):</strong> The column(s) that define the new order.</li>
+<li><strong>ascending (bool or list):</strong> Set <code>True</code> for ASC (default) or <code>False</code> for DESC. Can be a list matching the <code>by</code> parameter.</li>
+<li><strong>return_df (bool):</strong> If <code>True</code>, returns the freshly sorted table as a Pandas DataFrame.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_5">Pro Usage Examples<a class="headerlink" href="#pro-usage-examples_5" title="Permanent link">&para;</a></h3>
+<h4 id="1-sorting-by-a-single-column-chronological-order">1. Sorting by a Single Column (Chronological Order)<a class="headerlink" href="#1-sorting-by-a-single-column-chronological-order" title="Permanent link">&para;</a></h4>
+<p>Re-order your logs so that the most recent events appear at the end of the table.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;system_logs&quot;</span><span class="p">)</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># Sort the table by date and physically update it</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="n">ps</span><span class="o">.</span><span class="n">sort_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;logs&quot;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-advanced-multi-level-sorting">2. Advanced Multi-Level Sorting<a class="headerlink" href="#2-advanced-multi-level-sorting" title="Permanent link">&para;</a></h4>
+<p>Sort a product catalog first by category (ascending) and then by price (descending) to find the most expensive items in each group.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Sort by Category (ASC) and Price (DESC)</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">sort_table</span><span class="p">(</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    <span class="n">table</span><span class="o">=</span><span class="s2">&quot;products&quot;</span><span class="p">,</span> 
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="s2">&quot;price&quot;</span><span class="p">],</span> 
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>    <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="3-preparing-data-for-reporting">3. Preparing Data for Reporting<a class="headerlink" href="#3-preparing-data-for-reporting" title="Permanent link">&para;</a></h4>
+<p>Physically sort your sales data before exporting it to ensure the final CSV or Excel file is perfectly organized for your stakeholders.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">ps</span><span class="o">.</span><span class="n">sort_table</span><span class="p">(</span><span class="s2">&quot;quarterly_sales&quot;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;total_revenue&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">export_table</span><span class="p">(</span><span class="s2">&quot;quarterly_sales&quot;</span><span class="p">,</span> <span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;sales_report_2024&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-sort_table-instead-of-just-sql-order-by">Why use sort_table instead of just SQL ORDER BY?<a class="headerlink" href="#why-use-sort_table-instead-of-just-sql-order-by" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Efficiency:</strong> By physically sorting the table, you pay the performance cost once. Future operations like filtering or window functions can often run faster on ordered data.</li>
+<li><strong>Simplified Workflow:</strong> You don't need to append an <code>ORDER BY</code> clause to every single analysis script; the database "remembers" the correct order.</li>
+<li><strong>Consistency:</strong> When pulling samples with <code>sp.DF(head=10)</code>, you are guaranteed to get the top results based on your defined sorting logic.</li>
+<li><strong>Optimized Exports:</strong> When exporting to CSV or Excel, the data will already be in the desired order without needing to sort it again in memory.</li>
+</ol>
+<hr />
+<h2 id="the-remove_columns-function-streamlining-your-schema">The remove_columns Function: Streamlining Your Schema<a class="headerlink" href="#the-remove_columns-function-streamlining-your-schema" title="Permanent link">&para;</a></h2>
+<p>As your analysis progresses, you often find yourself with redundant or unnecessary columns that clutter your workspace and consume memory. The <code>remove_columns</code> function is designed to surgically remove these elements from your tables or views.</p>
+<p>It leverages DuckDB’s advanced <code>SELECT * EXCLUDE</code> logic, allowing you to drop specific columns without the need to manually list every other column you wish to keep.</p>
+<h2 id="psremove_columnstarget-columns-new_namenone-return_dffalse"><code>ps.remove_columns(target, columns, new_name=None, return_df=False)</code><a class="headerlink" href="#psremove_columnstarget-columns-new_namenone-return_dffalse" title="Permanent link">&para;</a></h2>
+<h3 id="key-features_1">Key Features<a class="headerlink" href="#key-features_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Smart Target Detection:</strong> Automatically identifies whether you are working with a physical <code>TABLE</code> or a logical <code>VIEW</code> and applies the correct SQL strategy.</li>
+<li><strong>In-Place Table Modification:</strong> For tables, it uses <code>ALTER TABLE</code> to drop columns instantly without rewriting the entire dataset.</li>
+<li><strong>Safe View Evolution:</strong> Since standard SQL views cannot be "partially dropped," <code>pysqdb</code> creates a new, refined view for you.</li>
+<li><strong>Advanced Exclusion:</strong> Uses the high-performance <code>EXCLUDE</code> syntax to maintain code readability and execution speed.</li>
+</ul>
+<h3 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>target (str):</strong> The name of the table or view to modify.</li>
+<li><strong>columns (str or list):</strong> A single column name or a list of names to be removed.</li>
+<li><strong>new_name (str, optional):</strong> If provided, <code>pysqdb</code> creates a new object instead of modifying the existing one (recommended for versioning).</li>
+<li><strong>return_df (bool):</strong> If <code>True</code>, returns the updated schema as a Pandas DataFrame.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_6">Pro Usage Examples<a class="headerlink" href="#pro-usage-examples_6" title="Permanent link">&para;</a></h3>
+<h4 id="1-dropping-sensitive-data-in-place">1. Dropping Sensitive Data In-Place<a class="headerlink" href="#1-dropping-sensitive-data-in-place" title="Permanent link">&para;</a></h4>
+<p>Quickly remove columns like <code>email</code> or <code>phone_number</code> from a physical table to ensure data privacy before sharing the database.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;user_database&quot;</span><span class="p">)</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="c1"># Permanently removes columns from the table</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="s2">&quot;phone_hash&quot;</span><span class="p">])</span>
+</span></code></pre></div>
+<h4 id="2-refining-a-view-for-visualization">2. Refining a View for Visualization<a class="headerlink" href="#2-refining-a-view-for-visualization" title="Permanent link">&para;</a></h4>
+<p>Create a cleaner version of an existing view by excluding technical metadata columns that aren't needed for your dashboard.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Creates &#39;sales_report_edited&#39; excluding the raw ID columns</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;sales_report&quot;</span><span class="p">,</span> 
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;raw_log_id&quot;</span><span class="p">,</span> <span class="s2">&quot;internal_status&quot;</span><span class="p">],</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>    <span class="n">new_name</span><span class="o">=</span><span class="s2">&quot;clean_sales_view&quot;</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="3-batch-removal-with-schema-inspection">3. Batch Removal with Schema Inspection<a class="headerlink" href="#3-batch-removal-with-schema-inspection" title="Permanent link">&para;</a></h4>
+<p>Remove multiple columns at once and immediately verify the remaining schema.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Remove a list of columns and see the result</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="n">df_remaining</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;survey_results&quot;</span><span class="p">,</span> 
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;temp_id&quot;</span><span class="p">,</span> <span class="s2">&quot;session_token&quot;</span><span class="p">,</span> <span class="s2">&quot;ip_address&quot;</span><span class="p">],</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="p">)</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_remaining</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-remove_columns">Why use remove_columns?<a class="headerlink" href="#why-use-remove_columns" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Efficiency:</strong> Dropping columns from a table using <code>ALTER TABLE</code> is a metadata-only operation in DuckDB, meaning it happens almost instantly regardless of the table size.</li>
+<li><strong>Readability:</strong> Instead of writing a <code>SELECT</code> statement with 50 columns just to remove 2, you use the <code>EXCLUDE</code> power to keep your code clean and maintainable.</li>
+<li><strong>Safety:</strong> By supporting the <code>new_name</code> parameter, <code>pysqdb</code> encourages a non-destructive workflow where you can create refined versions of your data while keeping the original source intact.</li>
+</ol>
+<hr />
+<h2 id="the-remove_rows-function-targetted-data-elimination">The remove_rows Function: Targetted Data Elimination<a class="headerlink" href="#the-remove_rows-function-targetted-data-elimination" title="Permanent link">&para;</a></h2>
+<p>While filtering is used to select data you want to keep, <code>remove_rows</code> is designed for the surgical removal of data you want to discard. Whether you are purging test records, deleting canceled orders, or removing data that falls outside of a specific timeframe, this function handles the operation with precision and speed.</p>
+<p>It automatically handles the logic reversal for you: when you provide the removal criteria, <code>pysqdb</code> ensures that only the remaining data is preserved in your tables or views.</p>
+<h2 id="psremove_rowstarget-criteria-new_namenone-return_dffalse"><code>ps.remove_rows(target, criteria, new_name=None, return_df=False)</code><a class="headerlink" href="#psremove_rowstarget-criteria-new_namenone-return_dffalse" title="Permanent link">&para;</a></h2>
+<h3 id="key-features_2">Key Features<a class="headerlink" href="#key-features_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>In-Place Purging:</strong> For physical tables, it uses the high-speed SQL <code>DELETE</code> command to remove rows instantly without creating copies.</li>
+<li><strong>Non-Destructive Options:</strong> Use the <code>new_name</code> parameter to create a "clean" copy of your data while keeping the original table intact.</li>
+<li><strong>Logical View Filtering:</strong> Since you cannot delete from a view, <code>pysqdb</code> creates a refined view that filters out the unwanted rows using a <code>WHERE NOT</code> clause.</li>
+<li><strong>Smart Syntax Correction:</strong> Just like our other filtering tools, it automatically converts Python's <code>==</code> to SQL's <code>=</code> for a seamless coding experience.</li>
+</ul>
+<h3 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>target (str):</strong> The name of the table or view.</li>
+<li><strong>criteria (str or list):</strong> The condition(s) defining the rows you want to <strong>remove</strong>. Multiple conditions in a list are combined with <code>AND</code>.</li>
+<li><strong>new_name (str, optional):</strong> The name for the new table or view. If omitted for a table, the deletion is permanent (in-place).</li>
+<li><strong>return_df (bool):</strong> If <code>True</code>, returns the resulting dataset as a Pandas DataFrame.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_7">Pro Usage Examples<a class="headerlink" href="#pro-usage-examples_7" title="Permanent link">&para;</a></h3>
+<h4 id="1-cleaning-up-transactional-errors">1. Cleaning Up Transactional Errors<a class="headerlink" href="#1-cleaning-up-transactional-errors" title="Permanent link">&para;</a></h4>
+<p>Quickly remove records that were created by mistake or during system testing.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;business_data&quot;</span><span class="p">)</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="c1"># Permanently delete test entries from the table</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_rows</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;transactions&quot;</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;status == &#39;test_entry&#39;&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-creating-a-clean-view-without-outdated-data">2. Creating a Clean View without Outdated Data<a class="headerlink" href="#2-creating-a-clean-view-without-outdated-data" title="Permanent link">&para;</a></h4>
+<p>Instead of deleting history, create a new view that only shows active data by removing records from previous years.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># Create a new view that excludes rows from 2022</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_rows</span><span class="p">(</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;annual_report&quot;</span><span class="p">,</span> 
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>    <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;year &lt; 2023&quot;</span><span class="p">,</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>    <span class="n">new_name</span><span class="o">=</span><span class="s2">&quot;modern_report_v&quot;</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="3-batch-removal-with-multiple-conditions">3. Batch Removal with Multiple Conditions<a class="headerlink" href="#3-batch-removal-with-multiple-conditions" title="Permanent link">&para;</a></h4>
+<p>Combine several rules to wipe out irrelevant data points in one command.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># Remove rows matching all criteria in the list</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_rows</span><span class="p">(</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;leads&quot;</span><span class="p">,</span> 
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>    <span class="n">criteria</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>        <span class="s2">&quot;is_unsubscribed == True&quot;</span><span class="p">,</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>        <span class="s2">&quot;last_contact_date &lt; &#39;2023-01-01&#39;&quot;</span><span class="p">,</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>        <span class="s2">&quot;lead_source == &#39;cold_call&#39;&quot;</span>
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>    <span class="p">]</span>
+</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-remove_rows">Why use remove_rows?<a class="headerlink" href="#why-use-remove_rows" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Intuitive Logic:</strong> Sometimes it is easier to define what you <em>don't</em> want rather than what you <em>do</em>. This function lets you think in terms of "trash removal."</li>
+<li><strong>Performance:</strong> For physical tables, <code>DELETE</code> operations in DuckDB are highly optimized, making it much faster than reading a whole table into Pandas and filtering it manually.</li>
+<li><strong>Database Integrity:</strong> By providing a unified interface for both tables and views, <code>pysqdb</code> ensures that your data manipulation remains consistent regardless of the underlying storage type.</li>
+</ol>
+<hr />
+<h2 id="the-rename_columns-function-multi-table-schema-alignment">The rename_columns Function: Multi-Table Schema Alignment<a class="headerlink" href="#the-rename_columns-function-multi-table-schema-alignment" title="Permanent link">&para;</a></h2>
+<p>In large projects, maintaining consistent column names across different tables is vital for clean joins and readable code. The <code>rename_columns</code> function allows you to perform bulk renaming operations across multiple physical tables in a single command.</p>
+<p>It is designed with maximum flexibility in mind, accepting various input formats and automatically validating your database schema to prevent accidental errors on logical views.</p>
+<h2 id="psrename_columnsoperations">ps.rename_columns(operations)<a class="headerlink" href="#psrename_columnsoperations" title="Permanent link">&para;</a></h2>
+<h3 id="key-features_3">Key Features<a class="headerlink" href="#key-features_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Bulk Processing:</strong> Rename columns in multiple tables simultaneously by passing a structured dictionary.</li>
+<li><strong>Format Flexibility:</strong> Accepts simple lists <code>["old", "new"]</code>, dictionaries <code>{"old": "new"}</code>, or lists of lists <code>[["old", "new"], ...]</code>.</li>
+<li><strong>View Protection:</strong> Automatically detects and skips views, ensuring that structural changes are only applied to physical data layers.</li>
+<li><strong>Safe Execution:</strong> Includes internal error handling to report missing columns or tables without crashing your entire pipeline.</li>
+</ul>
+<h3 id="parameters_7">Parameters<a class="headerlink" href="#parameters_7" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>operations (dict):</strong> A dictionary where keys are table names and values are the renaming rules.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_8">Pro Usage Examples<a class="headerlink" href="#pro-usage-examples_8" title="Permanent link">&para;</a></h3>
+<h4 id="1-standardizing-ids-across-tables">1. Standardizing IDs Across Tables<a class="headerlink" href="#1-standardizing-ids-across-tables" title="Permanent link">&para;</a></h4>
+<p>Ensure that your primary keys follow a consistent naming convention across your entire database.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;production_db&quot;</span><span class="p">)</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="c1"># Standardize ID columns in multiple tables at once</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="n">ps</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>    <span class="s2">&quot;users&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;user_id&quot;</span><span class="p">],</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>    <span class="s2">&quot;orders&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;order_id&quot;</span><span class="p">],</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>    <span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;product_id&quot;</span><span class="p">]</span>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="p">})</span>
+</span></code></pre></div>
+<h4 id="2-multi-column-renaming-in-a-single-table">2. Multi-Column Renaming in a Single Table<a class="headerlink" href="#2-multi-column-renaming-in-a-single-table" title="Permanent link">&para;</a></h4>
+<p>Use a dictionary mapping to update several column names for a specific table in one go.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Pass a dictionary for multiple changes in the &#39;sales&#39; table</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>    <span class="s2">&quot;sales&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>        <span class="s2">&quot;revenue_usd&quot;</span><span class="p">:</span> <span class="s2">&quot;revenue&quot;</span><span class="p">,</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>        <span class="s2">&quot;trans_date&quot;</span><span class="p">:</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>        <span class="s2">&quot;cust_name&quot;</span><span class="p">:</span> <span class="s2">&quot;customer_name&quot;</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>    <span class="p">}</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="p">})</span>
+</span></code></pre></div>
+<h4 id="3-handling-list-of-lists-format">3. Handling List-of-Lists Format<a class="headerlink" href="#3-handling-list-of-lists-format" title="Permanent link">&para;</a></h4>
+<p>If your renaming rules are generated dynamically, <code>pysqdb</code> can handle lists of pairs effortlessly.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># List of lists format for dynamic operations</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="n">dynamic_renames</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;old_f1&quot;</span><span class="p">,</span> <span class="s2">&quot;feature_1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;old_f2&quot;</span><span class="p">,</span> <span class="s2">&quot;feature_2&quot;</span><span class="p">]]</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s2">&quot;ml_features&quot;</span><span class="p">:</span> <span class="n">dynamic_renames</span><span class="p">})</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-rename_columns">Why use rename_columns?<a class="headerlink" href="#why-use-rename_columns" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Automation:</strong> Instead of writing dozens of <code>ALTER TABLE</code> statements manually, you define your mapping once and let <code>pysqdb</code> handle the iteration.</li>
+<li><strong>Standardization:</strong> It encourages a "Schema-First" mindset, helping you keep your database organized as it grows.</li>
+<li><strong>Safety:</strong> By skipping views and providing clear warnings, the function ensures that you don't break logical layers that depend on specific underlying column names.</li>
+</ol>
+<hr />
+<h2 id="the-rename_tables-function-global-asset-refactoring">The <code>rename_tables</code> Function: Global Asset Refactoring<a class="headerlink" href="#the-rename_tables-function-global-asset-refactoring" title="Permanent link">&para;</a></h2>
+<p>As projects grow, your naming conventions might evolve. What started as <code>raw_data</code> might need to become <code>stg_sales_2024</code>. The <code>rename_tables</code> function allows you to perform bulk renaming of both physical tables and logical views using a single dictionary mapping.</p>
+<p>It automatically detects the asset type and applies the correct SQL logic, ensuring your database remains organized and your table names stay meaningful.</p>
+<h2 id="psrename_tablesoperations"><code>ps.rename_tables(operations)</code><a class="headerlink" href="#psrename_tablesoperations" title="Permanent link">&para;</a></h2>
+<h3 id="key-features_4">Key Features<a class="headerlink" href="#key-features_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Dual-Type Support:</strong> Seamlessly renames both physical <code>TABLES</code> and virtual <code>VIEWS</code> without requiring the user to specify the type.</li>
+<li><strong>Bulk Refactoring:</strong> Update your entire database schema in one command by passing multiple old-to-new name pairs.</li>
+<li><strong>Metadata Integrity:</strong> Renaming via <code>ALTER</code> is a metadata operation, meaning it happens instantly regardless of how many millions of rows are in the table.</li>
+<li><strong>Safe Skipping:</strong> Includes internal checks to warn you if a source table doesn't exist, preventing script crashes during batch operations.</li>
+</ul>
+<h3 id="parameters_8">Parameters<a class="headerlink" href="#parameters_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>operations (dict):</strong> A dictionary mapping old names (keys) to new names (values).</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_9">Pro Usage Examples<a class="headerlink" href="#pro-usage-examples_9" title="Permanent link">&para;</a></h3>
+<h4 id="1-batch-versioning">1. Batch Versioning<a class="headerlink" href="#1-batch-versioning" title="Permanent link">&para;</a></h4>
+<p>Quickly transition your production tables to a new versioning scheme.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;analytics_db&quot;</span><span class="p">)</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="c1"># Rename multiple tables to include a version tag</span>
+</span><span id="__span-30-6"><a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="n">ps</span><span class="o">.</span><span class="n">rename_tables</span><span class="p">({</span>
+</span><span id="__span-30-7"><a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>    <span class="s2">&quot;customers&quot;</span><span class="p">:</span> <span class="s2">&quot;customers_v1&quot;</span><span class="p">,</span>
+</span><span id="__span-30-8"><a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>    <span class="s2">&quot;orders&quot;</span><span class="p">:</span> <span class="s2">&quot;orders_v1&quot;</span><span class="p">,</span>
+</span><span id="__span-30-9"><a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>    <span class="s2">&quot;inventory_view&quot;</span><span class="p">:</span> <span class="s2">&quot;inventory_v1_view&quot;</span>
+</span><span id="__span-30-10"><a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="p">})</span>
+</span></code></pre></div>
+<h4 id="2-cleaning-up-temporary-assets">2. Cleaning Up Temporary Assets<a class="headerlink" href="#2-cleaning-up-temporary-assets" title="Permanent link">&para;</a></h4>
+<p>Rename your experimental or temporary tables to a standardized "archive" format.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1"># Moving temporary workspace tables to a backup naming format</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">rename_tables</span><span class="p">({</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>    <span class="s2">&quot;test_results&quot;</span><span class="p">:</span> <span class="s2">&quot;archive_test_results_may&quot;</span><span class="p">,</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>    <span class="s2">&quot;temp_join_result&quot;</span><span class="p">:</span> <span class="s2">&quot;backup_join_result&quot;</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="p">})</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-rename_tables">Why use rename_tables?<a class="headerlink" href="#why-use-rename_tables" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Syntactic Simplicity:</strong> You don't need to remember if the command is <code>ALTER TABLE</code> or <code>ALTER VIEW</code>. <code>pysqdb</code> inspects the <code>information_schema</code> and handles the syntax for you.</li>
+<li><strong>Speed:</strong> Because this is a metadata-only change, there is zero data movement. It is the fastest way to reorganize your data warehouse.</li>
+<li><strong>Pipeline Flexibility:</strong> If you are migrating a legacy pipeline to a new structure, you can use <code>rename_tables</code> as a "bridge" to keep your scripts compatible with new naming standards.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

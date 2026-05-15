@@ -1,0 +1,2217 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A powerful and minimalist data package combining DuckDB SQL engine with Easy-to-use Python interface for efficient data manipulation and analysis. Fast as DuckDB, Simple as Pandas.">
+      
+      
+        <meta name="author" content="Vasif Asadov">
+      
+      
+      
+        <link rel="prev" href="../01_quick_start/">
+      
+      
+        <link rel="next" href="../03_data_cleaning/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Core Operations & I/O - pysqdb Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="pink">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#connection-database-management" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="pysqdb Documentation" class="md-header__button md-logo" aria-label="pysqdb Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pysqdb Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core Operations & I/O
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="pink"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="pysqdb Documentation" class="md-nav__button md-logo" aria-label="pysqdb Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    pysqdb Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Operations & I/O
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Operations & I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connection-database-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection &amp; Database Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection &amp; Database Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#psconnectdb_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.connect(db_name)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.connect(db_name)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#importing-data-the-read-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Importing Data (The read function)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Importing Data (The read function)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#psreadpath-file_type-table_name-strictfalse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.read(path, file_type, table_name, strict=False)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.read(path, file_type, table_name, strict=False)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exporting-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exporting Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exporting Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#psexport_tabletable_name-export_formatcsv-file_namenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.export_table(table_name, export_format="csv", file_name=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-df-function-bridging-sql-pandas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 The DF Function: Bridging SQL &amp; Pandas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 The DF Function: Bridging SQL &amp; Pandas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spdftable-headnone-tailnone-samplenone-columnsnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sp.DF(table, head=None, tail=None, sample=None, columns=None)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sp.DF(table, head=None, tail=None, sample=None, columns=None)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-quick-data-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Quick Data Inspection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-memory-efficient-column-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Memory-Efficient Column Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-fetching-the-tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Fetching the "Tail"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-tip-performance-vs-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Pro Tip: Performance vs. Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-give_array-function-ready-for-machine-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The give_array Function: Ready for Machine Learning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The give_array Function: Ready for Machine Learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spgive_arraytable-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sp.give_array(table, columns)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sp.give_array(table, columns)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-extracting-features-for-machine-learning-x-and-y" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Extracting Features for Machine Learning ($X$ and $y$)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-fast-statistical-calculations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Fast Statistical Calculations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-give_array-instead-of-dfto_numpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Why use give_array instead of DF().to_numpy()?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-give_info-function-instant-data-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The give_info Function: Instant Data Profiling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The give_info Function: Instant Data Profiling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spgive_infotable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sp.give_info(table)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sp.give_info(table)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-tells-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it tells you:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-give_info-instead-of-pandas-describe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use give_info instead of Pandas .describe()?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-import_df-function-bridging-pandas-and-duckdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The import_df Function: Bridging Pandas and DuckDB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#psimport_dfdf-table_name-columnsnone-rowsnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.import_df(df, table_name, columns=None, rows=None)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.import_df(df, table_name, columns=None, rows=None)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-direct-transfer-of-a-full-dataframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Direct Transfer of a Full DataFrame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-importing-a-specific-subset-slicing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Importing a Specific Subset (Slicing)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-index-based-column-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Index-Based Column Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-import_df-instead-of-duckdbs-native-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use import_df instead of DuckDB's native register?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-copy_table-function-data-checkpointing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The copy_table Function: Data Checkpointing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pscopy_tabletable-copied_table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.copy_table(table, copied_table)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.copy_table(table, copied_table)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-creating-a-safety-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Creating a Safety Backup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-creating-a-staging-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Creating a Staging Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-copy_table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use copy_table?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion-youve-laid-the-foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion: You've Laid the Foundation!
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conclusion: You&#39;ve Laid the Foundation!">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_data_cleaning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Cleaning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_join_filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relational Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_summary_windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connection-database-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection &amp; Database Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection &amp; Database Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#psconnectdb_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.connect(db_name)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.connect(db_name)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#importing-data-the-read-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Importing Data (The read function)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Importing Data (The read function)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#psreadpath-file_type-table_name-strictfalse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.read(path, file_type, table_name, strict=False)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.read(path, file_type, table_name, strict=False)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exporting-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exporting Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exporting Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#psexport_tabletable_name-export_formatcsv-file_namenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.export_table(table_name, export_format="csv", file_name=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-df-function-bridging-sql-pandas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 The DF Function: Bridging SQL &amp; Pandas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 The DF Function: Bridging SQL &amp; Pandas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spdftable-headnone-tailnone-samplenone-columnsnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sp.DF(table, head=None, tail=None, sample=None, columns=None)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sp.DF(table, head=None, tail=None, sample=None, columns=None)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-quick-data-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Quick Data Inspection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-memory-efficient-column-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Memory-Efficient Column Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-fetching-the-tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Fetching the "Tail"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-tip-performance-vs-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Pro Tip: Performance vs. Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-give_array-function-ready-for-machine-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The give_array Function: Ready for Machine Learning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The give_array Function: Ready for Machine Learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spgive_arraytable-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sp.give_array(table, columns)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sp.give_array(table, columns)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-extracting-features-for-machine-learning-x-and-y" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Extracting Features for Machine Learning ($X$ and $y$)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-fast-statistical-calculations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Fast Statistical Calculations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-give_array-instead-of-dfto_numpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Why use give_array instead of DF().to_numpy()?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-give_info-function-instant-data-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The give_info Function: Instant Data Profiling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The give_info Function: Instant Data Profiling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spgive_infotable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sp.give_info(table)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sp.give_info(table)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-tells-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it tells you:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-give_info-instead-of-pandas-describe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use give_info instead of Pandas .describe()?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-import_df-function-bridging-pandas-and-duckdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The import_df Function: Bridging Pandas and DuckDB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#psimport_dfdf-table_name-columnsnone-rowsnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.import_df(df, table_name, columns=None, rows=None)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.import_df(df, table_name, columns=None, rows=None)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-direct-transfer-of-a-full-dataframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Direct Transfer of a Full DataFrame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-importing-a-specific-subset-slicing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Importing a Specific Subset (Slicing)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-index-based-column-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Index-Based Column Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-import_df-instead-of-duckdbs-native-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use import_df instead of DuckDB's native register?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-copy_table-function-data-checkpointing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The copy_table Function: Data Checkpointing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pscopy_tabletable-copied_table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ps.copy_table(table, copied_table)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ps.copy_table(table, copied_table)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pro-usage-examples_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pro Usage Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pro Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-creating-a-safety-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Creating a Safety Backup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-creating-a-staging-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Creating a Staging Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-copy_table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use copy_table?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion-youve-laid-the-foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion: You've Laid the Foundation!
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conclusion: You&#39;ve Laid the Foundation!">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h2 id="connection-database-management">Connection &amp; Database Management<a class="headerlink" href="#connection-database-management" title="Permanent link">&para;</a></h2>
+<p>The first step in any <code>pysqdb</code> workflow is establishing a connection. Our <code>connect</code> function is designed to be smart and flexible, handling both persistent disk storage and ultra-fast in-memory processing.</p>
+<h3 id="psconnectdb_name"><code>ps.connect(db_name)</code><a class="headerlink" href="#psconnectdb_name" title="Permanent link">&para;</a></h3>
+<p>This function initializes the global database connection. Everything you do afterwards (reading files, cleaning data, analytics) will happen within this active connection.</p>
+<h4 id="how-it-works"><strong>How it works:</strong><a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Auto-Extension:</strong> If you name your database <code>my_data</code>, <code>pysqdb</code> automatically appends <code>.duckdb</code> for you.</li>
+<li><strong>In-Memory Mode:</strong> Want to work purely in RAM? Just use <code>:memory:</code>.</li>
+<li><strong>Active Session Management:</strong> If you call <code>connect</code> again, it safely closes the previous connection before opening the new one, preventing memory leaks and locked files.</li>
+</ul>
+<h4 id="examples"><strong>Examples:</strong><a class="headerlink" href="#examples" title="Permanent link">&para;</a></h4>
+<p><strong>1. Persistent Database (Saves to disk)</strong>
+Ideal for long-term projects where you want your tables to stay there tomorrow.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Creates &#39;analytics_project.duckdb&#39; in your current folder</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">sp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;analytics_project&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>2. In-Memory Database (Lightning Fast)</strong>
+Perfect for quick scripts, prototyping, or when you don't need to save the data permanently.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Runs entirely in RAM. Data is gone when the script ends.</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">sp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="importing-data-the-read-function">Importing Data (The <code>read</code> function)<a class="headerlink" href="#importing-data-the-read-function" title="Permanent link">&para;</a></h2>
+<p>Once connected, you need to bring your data into the DuckDB ecosystem. <code>pysqdb</code> provides a robust <code>read</code> function that handles different formats and, most importantly, <strong>recovers from errors</strong> where other libraries fail.</p>
+<h3 id="psreadpath-file_type-table_name-strictfalse"><code>ps.read(path, file_type, table_name, strict=False)</code><a class="headerlink" href="#psreadpath-file_type-table_name-strictfalse" title="Permanent link">&para;</a></h3>
+<h4 id="key-features"><strong>Key Features:</strong><a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Auto-Formatting:</strong> Supports <code>csv</code>, <code>json</code>, <code>parquet</code>, and <code>excel</code>.</li>
+<li><strong>Smart Fallback:</strong> If DuckDB's C++ engine encounters a "dirty" CSV (like a malformed Kaggle dataset), <code>pysqdb</code> automatically switches to a <strong>Pandas-powered Python engine</strong> to rescue your data.</li>
+<li><strong>Strict Mode:</strong> Set <code>strict=True</code> if you want the operation to fail on bad data lines.</li>
+</ul>
+<h4 id="usage"><strong>Usage:</strong><a class="headerlink" href="#usage" title="Permanent link">&para;</a></h4>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Reading a dirty CSV file</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/movies.csv&quot;</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;movies&quot;</span><span class="p">)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Reading a Parquet file for high-performance analytics</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">ps</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/logs.parquet&quot;</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;system_logs&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="exporting-data">Exporting Data<a class="headerlink" href="#exporting-data" title="Permanent link">&para;</a></h2>
+<p>After your analysis is complete, you can easily move your data out of the database and back into a file for sharing or reporting.</p>
+<h3 id="psexport_tabletable_name-export_formatcsv-file_namenone"><code>ps.export_table(table_name, export_format="csv", file_name=None)</code><a class="headerlink" href="#psexport_tabletable_name-export_formatcsv-file_namenone" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Export your cleaned table back to a CSV</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">export_table</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;cleaned_movies&quot;</span><span class="p">,</span> <span class="n">export_format</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Export to Parquet for use in other big data tools</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">ps</span><span class="o">.</span><span class="n">export_table</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;final_results&quot;</span><span class="p">,</span> <span class="n">export_format</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;output_data&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h1 id="the-df-function-bridging-sql-pandas">🚀 The <code>DF</code> Function: Bridging SQL &amp; Pandas<a class="headerlink" href="#the-df-function-bridging-sql-pandas" title="Permanent link">&para;</a></h1>
+<p>The <code>DF</code> function is your primary tool for retrieving data from the DuckDB engine into a Python-friendly <strong>Pandas DataFrame</strong>.</p>
+<p>While <code>sqpy</code> handles heavy computations at C++ speeds within the database, <code>DF</code> allows you to pull specific slices of your data into RAM for final visualization, machine learning, or custom Python processing.</p>
+<h2 id="spdftable-headnone-tailnone-samplenone-columnsnone"><code>sp.DF(table, head=None, tail=None, sample=None, columns=None)</code><a class="headerlink" href="#spdftable-headnone-tailnone-samplenone-columnsnone" title="Permanent link">&para;</a></h2>
+<p>Unlike a standard <code>SELECT *</code>, this function is optimized to fetch only what you need, saving memory and time.</p>
+<h3 id="parameters"><strong>Parameters:</strong><a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>table</code> (str):</strong> The name of the table you want to query.</li>
+<li><strong><code>head</code> (int, optional):</strong> Returns the first $N$ rows (uses SQL <code>LIMIT</code>).</li>
+<li><strong><code>tail</code> (int, optional):</strong> Returns the last $N$ rows. <strong>Note:</strong> Since SQL tables are unordered by nature, this uses an optimized <code>OFFSET</code> calculation to find the end of the table.</li>
+<li><strong><code>sample</code> (int, optional):</strong> Returns $N$ random rows using DuckDB's native sampling engine—perfect for quick Exploratory Data Analysis (EDA).</li>
+<li><strong><code>columns</code> (list or str, optional):</strong> Specify exactly which columns you want to pull. Great for memory management.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples"><strong>Pro Usage Examples</strong><a class="headerlink" href="#pro-usage-examples" title="Permanent link">&para;</a></h3>
+<h4 id="1-quick-data-inspection"><strong>1. Quick Data Inspection</strong><a class="headerlink" href="#1-quick-data-inspection" title="Permanent link">&para;</a></h4>
+<p>Need to see what's inside your <code>movies</code> table without crashing your session? Use <code>head</code> or <code>sample</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Get the first 10 rows</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">df_head</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">DF</span><span class="p">(</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">head</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># Get 50 random rows for a quick sanity check</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">df_sample</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">DF</span><span class="p">(</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-memory-efficient-column-selection"><strong>2. Memory-Efficient Column Selection</strong><a class="headerlink" href="#2-memory-efficient-column-selection" title="Permanent link">&para;</a></h4>
+<p>If your table has 100 columns but you only need two, don't waste RAM.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Pull only &#39;title&#39; and &#39;revenue&#39; into a Pandas DataFrame</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">df_slim</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">DF</span><span class="p">(</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;revenue&quot;</span><span class="p">],</span> <span class="n">head</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="3-fetching-the-tail"><strong>3. Fetching the "Tail"</strong><a class="headerlink" href="#3-fetching-the-tail" title="Permanent link">&para;</a></h4>
+<p>Useful for checking the most recent entries in a time-series or sorted table.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Get the last 5 rows of the table</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">df_last</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">DF</span><span class="p">(</span><span class="s2">&quot;reviews&quot;</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="pro-tip-performance-vs-memory"><strong>💡 Pro Tip: Performance vs. Memory</strong><a class="headerlink" href="#pro-tip-performance-vs-memory" title="Permanent link">&para;</a></h3>
+<p>Remember that <code>pysqdb</code> is designed to handle <strong>Big Data</strong>. While <code>DF</code> is convenient, pulling millions of rows into a Pandas DataFrame can still lead to memory issues.</p>
+<blockquote>
+<p><strong>Best Practice:</strong> Use <code>pysqdb</code>'s analytical functions (<code>summarize</code>, <code>filter</code>, <code>window</code>) to aggregate or reduce your data first, and use <code>DF</code> only when you are ready to work with the final, smaller result set.</p>
+</blockquote>
+<hr />
+<h1 id="the-give_array-function-ready-for-machine-learning">The <code>give_array</code> Function: Ready for Machine Learning<a class="headerlink" href="#the-give_array-function-ready-for-machine-learning" title="Permanent link">&para;</a></h1>
+<p>While Dataframes are great for manipulation, most Mathematical and Machine Learning libraries (like Scikit-learn, NumPy, and PyTorch) require data in the form of raw arrays.</p>
+<p>The <code>give_array</code> function extracts data directly from your DuckDB tables and converts it into a high-performance <strong>NumPy ndarray</strong>, providing a direct pipeline from your database to your models.</p>
+<h2 id="spgive_arraytable-columns"><code>sp.give_array(table, columns)</code><a class="headerlink" href="#spgive_arraytable-columns" title="Permanent link">&para;</a></h2>
+<p>This function bypasses the overhead of manual conversion, giving you a clean array of the features or targets you need.</p>
+<h3 id="parameters_1"><strong>Parameters:</strong><a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>table</code> (str):</strong> The name of the source table.</li>
+<li><strong><code>columns</code> (list or str):</strong> The column or list of columns to be extracted. If a single string is provided, it is automatically converted to a list.</li>
+</ul>
+<h3 id="returns"><strong>Returns:</strong><a class="headerlink" href="#returns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>numpy.ndarray</code>:</strong> A NumPy array containing the values from the specified columns.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_1"><strong>Pro Usage Examples</strong><a class="headerlink" href="#pro-usage-examples_1" title="Permanent link">&para;</a></h3>
+<h4 id="1-extracting-features-for-machine-learning-x-and-y"><strong>1. Extracting Features for Machine Learning ($X$ and $y$)</strong><a class="headerlink" href="#1-extracting-features-for-machine-learning-x-and-y" title="Permanent link">&para;</a></h4>
+<p>Instead of manually slicing DataFrames, you can pull your feature matrix and target vector directly.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Connect and prepare your data</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;model_data&quot;</span><span class="p">)</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># Extract features (X) as a NumPy array</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="n">X</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">give_array</span><span class="p">(</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">,</span> <span class="s2">&quot;runtime&quot;</span><span class="p">,</span> <span class="s2">&quot;popularity&quot;</span><span class="p">])</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1"># Extract target (y)</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="n">y</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">give_array</span><span class="p">(</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;revenue&quot;</span><span class="p">)</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="c1"># Now it&#39;s ready for Scikit-learn!</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c1"># model.fit(X, y)</span>
+</span></code></pre></div>
+<h4 id="2-fast-statistical-calculations"><strong>2. Fast Statistical Calculations</strong><a class="headerlink" href="#2-fast-statistical-calculations" title="Permanent link">&para;</a></h4>
+<p>NumPy is incredibly fast for vector operations. Use <code>give_array</code> when you need to perform heavy math outside of SQL.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Get revenue as a 1D array</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">revenue_array</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">give_array</span><span class="p">(</span><span class="s2">&quot;movies&quot;</span><span class="p">,</span> <span class="s2">&quot;revenue&quot;</span><span class="p">)</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># Perform fast NumPy math</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">log_revenue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">revenue_array</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-give_array-instead-of-dfto_numpy"><strong>💡 Why use <code>give_array</code> instead of <code>DF().to_numpy()</code>?</strong><a class="headerlink" href="#why-use-give_array-instead-of-dfto_numpy" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Syntactic Sugar:</strong> It’s a cleaner, more readable one-liner in your scripts.</li>
+<li><strong>Intent-Driven:</strong> It signals that you are moving from the "Data Engineering" phase to the "Modeling/Math" phase.</li>
+<li><strong>Consistency:</strong> Handles the conversion of single column strings to lists internally, preventing common shape errors in NumPy.</li>
+</ol>
+<hr />
+<h1 id="the-give_info-function-instant-data-profiling">The <code>give_info</code> Function: Instant Data Profiling<a class="headerlink" href="#the-give_info-function-instant-data-profiling" title="Permanent link">&para;</a></h1>
+<p>Every great data project starts with understanding your data. The <code>give_info</code> function is your "all-in-one" diagnostic tool. It provides a high-level overview of your table's structure alongside deep statistical insights, helping you spot missing values, outliers, and distribution patterns instantly.</p>
+<h2 id="spgive_infotable"><code>sp.give_info(table)</code><a class="headerlink" href="#spgive_infotable" title="Permanent link">&para;</a></h2>
+<p>Instead of running multiple Pandas commands like <code>.info()</code>, <code>.describe()</code>, and <code>.isnull().sum()</code>, <code>give_info</code> leverages DuckDB's native summarization engine to do it all in one go—even on datasets that are too large for RAM.</p>
+<h3 id="what-it-tells-you"><strong>What it tells you:</strong><a class="headerlink" href="#what-it-tells-you" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>General Metadata:</strong> Total row count and the number of columns.</li>
+<li><strong>Schema Details:</strong> Every column name and its specific data type.</li>
+<li><strong>Statistical Summary:</strong></li>
+<li><strong>Range:</strong> Min and Max values.</li>
+<li><strong>Central Tendency:</strong> Average (Mean) and Median (q50).</li>
+<li><strong>Dispersion:</strong> 25th (q25) and 75th (q75) percentiles.</li>
+<li><strong>Uniqueness:</strong> <code>approx_unique</code> count to identify IDs or categorical data.</li>
+<li><strong>Data Quality:</strong> <code>null_percentage</code> to identify where your data is "leaking."</li>
+</ul>
+<hr />
+<h3 id="usage-example"><strong>Usage Example</strong><a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h3>
+<p>Imagine you just loaded a massive <code>sales</code> table and want to check its health before starting your analysis.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># Connect and load data</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;ecommerce_db&quot;</span><span class="p">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># Get the full statistical report</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">sales_info</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">give_info</span><span class="p">(</span><span class="s2">&quot;sales&quot;</span><span class="p">)</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="c1"># View the report</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">sales_info</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>What the output looks like (Cleaned &amp; Focused):</strong>
+The function returns a refined Pandas DataFrame containing only the most actionable insights:</p>
+<table>
+<thead>
+<tr>
+<th>column_name</th>
+<th>column_type</th>
+<th>min</th>
+<th>max</th>
+<th>avg</th>
+<th>q50</th>
+<th>null_percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>order_id</strong></td>
+<td>BIGINT</td>
+<td>1001</td>
+<td>9999</td>
+<td>...</td>
+<td>...</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td><strong>revenue</strong></td>
+<td>DOUBLE</td>
+<td>0.0</td>
+<td>5400.5</td>
+<td>120.4</td>
+<td>85.0</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td><strong>category</strong></td>
+<td>VARCHAR</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="why-use-give_info-instead-of-pandas-describe"><strong>Why use <code>give_info</code> instead of Pandas <code>.describe()</code>?</strong><a class="headerlink" href="#why-use-give_info-instead-of-pandas-describe" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Performance:</strong> DuckDB computes these statistics using optimized C++ kernels. It is significantly faster than Pandas, especially on multi-million row tables.</li>
+<li><strong>Built-in Quality Check:</strong> It automatically calculates the <code>null_percentage</code>, which is the #1 thing a data scientist checks before cleaning.</li>
+<li><strong>Smart Summarization:</strong> It handles both numerical and categorical data types gracefully within the same report.</li>
+</ol>
+<hr />
+<h2 id="the-import_df-function-bridging-pandas-and-duckdb">The <code>import_df</code> Function: Bridging Pandas and DuckDB<a class="headerlink" href="#the-import_df-function-bridging-pandas-and-duckdb" title="Permanent link">&para;</a></h2>
+<p>While <code>pysqdb</code> excels at reading raw files, you often already have data in your Python session as a <strong>Pandas DataFrame</strong>. The <code>import_df</code> function provides a high-speed bridge to move that data into DuckDB.</p>
+<p>Unlike a simple import, <code>pysqdb</code> allows you to slice your DataFrame (rows or columns) during the transfer, ensuring you only store the data you actually need.</p>
+<h2 id="psimport_dfdf-table_name-columnsnone-rowsnone"><code>ps.import_df(df, table_name, columns=None, rows=None)</code><a class="headerlink" href="#psimport_dfdf-table_name-columnsnone-rowsnone" title="Permanent link">&para;</a></h2>
+<h3 id="key-features_1">Key Features<a class="headerlink" href="#key-features_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Smart Slicing:</strong> Supports both integer-based (<code>iloc</code>) and label-based (<code>loc</code>) slicing for both rows and columns.</li>
+<li><strong>Memory Efficient:</strong> Uses DuckDB's <code>register</code> mechanism to move data without unnecessary overhead.</li>
+<li><strong>Non-Destructive:</strong> Performs operations on a copy, leaving your original DataFrame untouched in memory.</li>
+<li><strong>Dynamic Selection:</strong> Pass a list for specific columns or a tuple for a range of columns.</li>
+</ul>
+<h3 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>df (pandas.DataFrame):</strong> The source DataFrame.</li>
+<li><strong>table_name (str):</strong> The name of the new table to create in DuckDB.</li>
+<li><strong>columns (list or tuple, optional):</strong> * <code>["col1", "col3"]</code>: Selects specific columns.</li>
+<li><code>(1, 5)</code>: Selects a range of columns by index.</li>
+<li>
+<p><code>("Name", "Salary")</code>: Selects a range of columns by label.</p>
+</li>
+<li>
+<p><strong>rows (list or tuple, optional):</strong></p>
+</li>
+<li><code>[0, 100]</code>: Imports the first 100 rows.</li>
+<li><code>["id_100", "id_200"]</code>: Imports a specific range of index labels.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_2">Pro Usage Examples<a class="headerlink" href="#pro-usage-examples_2" title="Permanent link">&para;</a></h3>
+<h4 id="1-direct-transfer-of-a-full-dataframe">1. Direct Transfer of a Full DataFrame<a class="headerlink" href="#1-direct-transfer-of-a-full-dataframe" title="Permanent link">&para;</a></h4>
+<p>The simplest way to move your work from Pandas to the SQL power of <code>sqpy</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Your existing Pandas work</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">my_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;huge_dataset.csv&quot;</span><span class="p">)</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;my_analytics_db&quot;</span><span class="p">)</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># Move the entire DF to DuckDB</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="n">ps</span><span class="o">.</span><span class="n">import_df</span><span class="p">(</span><span class="n">my_df</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;raw_sales&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-importing-a-specific-subset-slicing">2. Importing a Specific Subset (Slicing)<a class="headerlink" href="#2-importing-a-specific-subset-slicing" title="Permanent link">&para;</a></h4>
+<p>If your DataFrame has 200 columns but you only need a specific range, you can slice it during the import.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Import only the first 500 rows and columns from &#39;Date&#39; to &#39;Revenue&#39;</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">import_df</span><span class="p">(</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">df</span><span class="o">=</span><span class="n">large_df</span><span class="p">,</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;filtered_sales&quot;</span><span class="p">,</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">rows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Revenue&quot;</span><span class="p">)</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="3-index-based-column-selection">3. Index-Based Column Selection<a class="headerlink" href="#3-index-based-column-selection" title="Permanent link">&para;</a></h4>
+<p>Perfect for datasets where you know the structure but not necessarily all the column names.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Import specific column indices: 0, 2, and 5</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">import_df</span><span class="p">(</span><span class="n">large_df</span><span class="p">,</span> <span class="s2">&quot;feature_table&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-import_df-instead-of-duckdbs-native-register">Why use import_df instead of DuckDB's native register?<a class="headerlink" href="#why-use-import_df-instead-of-duckdbs-native-register" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Integrated Slicing:</strong> You don't need to slice your DataFrame manually before importing. <code>pysqdb</code> handles the <code>iloc</code>/<code>loc</code> logic internally.</li>
+<li><strong>Persistence:</strong> While DuckDB's <code>register</code> creates a temporary virtual link, <code>import_df</code> creates a <strong>physical table</strong> in your database, ensuring your data is saved even after you close the DataFrame.</li>
+<li><strong>Safety:</strong> It includes built-in error handling and unregisters temporary views automatically, keeping your database environment clean.</li>
+</ol>
+<hr />
+<h2 id="the-copy_table-function-data-checkpointing">The <code>copy_table</code> Function: Data Checkpointing<a class="headerlink" href="#the-copy_table-function-data-checkpointing" title="Permanent link">&para;</a></h2>
+<p>Before you perform destructive data cleaning operations—like deleting rows or dropping columns—it is a best practice to create a backup of your data. The <code>copy_table</code> function allows you to create an exact physical clone of any table in your database instantly.</p>
+<p>Since this operation stays entirely within the DuckDB engine, copying a table with millions of rows is significantly faster than exporting and re-importing data.</p>
+<h2 id="pscopy_tabletable-copied_table"><code>ps.copy_table(table, copied_table)</code><a class="headerlink" href="#pscopy_tabletable-copied_table" title="Permanent link">&para;</a></h2>
+<h3 id="key-features_2">Key Features<a class="headerlink" href="#key-features_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Full Data Persistence:</strong> Unlike a view, this creates a physical duplicate of the data on your disk.</li>
+<li><strong>Instant Backups:</strong> Perfect for creating "Checkpoints" before experimenting with complex transformations.</li>
+<li><strong>Non-Destructive Workflow:</strong> Safely test your cleaning scripts on the copy while keeping the original source of truth intact.</li>
+</ul>
+<h3 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>table (str):</strong> The name of the original source table.</li>
+<li><strong>copied_table (str):</strong> The name for your new duplicated table.</li>
+</ul>
+<hr />
+<h3 id="pro-usage-examples_3">Pro Usage Examples<a class="headerlink" href="#pro-usage-examples_3" title="Permanent link">&para;</a></h3>
+<h4 id="1-creating-a-safety-backup">1. Creating a Safety Backup<a class="headerlink" href="#1-creating-a-safety-backup" title="Permanent link">&para;</a></h4>
+<p>Always create a copy before running operations that permanently alter your table.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pysqdb</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">ps</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;production_db&quot;</span><span class="p">)</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># Create a backup before cleaning</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">ps</span><span class="o">.</span><span class="n">copy_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;raw_users&quot;</span><span class="p">,</span> <span class="n">copied_table</span><span class="o">=</span><span class="s2">&quot;raw_users_backup&quot;</span><span class="p">)</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1"># Now you can safely clean the original</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="n">ps</span><span class="o">.</span><span class="n">remove_rows</span><span class="p">(</span><span class="s2">&quot;raw_users&quot;</span><span class="p">,</span> <span class="s2">&quot;is_bot == True&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="2-creating-a-staging-table">2. Creating a Staging Table<a class="headerlink" href="#2-creating-a-staging-table" title="Permanent link">&para;</a></h4>
+<p>Use copying to move data from a raw state to a staging state where you can perform feature engineering.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Create a staging table for feature engineering</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">ps</span><span class="o">.</span><span class="n">copy_table</span><span class="p">(</span><span class="s2">&quot;sales_data&quot;</span><span class="p">,</span> <span class="s2">&quot;stg_sales_features&quot;</span><span class="p">)</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Apply transformations to the staging table</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">ps</span><span class="o">.</span><span class="n">clip_outliers</span><span class="p">(</span><span class="s2">&quot;stg_sales_features&quot;</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h3 id="why-use-copy_table">Why use copy_table?<a class="headerlink" href="#why-use-copy_table" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Safety First:</strong> It provides a "Undo" button for your database. If a complex cleaning script goes wrong, you can simply restore from your copy.</li>
+<li><strong>Performance:</strong> DuckDB uses highly optimized block-level copying, making this one of the fastest operations in the library.</li>
+<li><strong>Workflow Organization:</strong> It helps you maintain a clear lineage of your data (e.g., <code>raw</code> -&gt; <code>backup</code> -&gt; <code>clean</code>).</li>
+</ol>
+<hr />
+<h2 id="conclusion-youve-laid-the-foundation">Conclusion: You've Laid the Foundation!<a class="headerlink" href="#conclusion-youve-laid-the-foundation" title="Permanent link">&para;</a></h2>
+<p>You have just mastered the core DNA of <code>pysqdb</code>. By reaching this point, you now have the power to:</p>
+<ul>
+<li><strong>Bridge the Gap:</strong> Seamlessly connect Python to the lightning-fast world of DuckDB.</li>
+<li><strong>Handle Dirty Data:</strong> Load files that usually crash other libraries, thanks to our robust fallback mechanisms.</li>
+<li><strong>Profile Instantly:</strong> Get a deep statistical "X-ray" of your tables without writing long, repetitive SQL or Pandas code.</li>
+<li><strong>Prepare for ML:</strong> Convert database tables directly into NumPy arrays, ready for your next big model.</li>
+</ul>
+<h3 id="whats-next"><strong>What's Next?</strong><a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h3>
+<p>Data in the real world is rarely perfect. It’s messy, contains nulls, and has outliers that can ruin your analysis.</p>
+<p>In the next section, <strong>"Data Cleaning &amp; Preprocessing"</strong>, we will move from just <em>handling</em> data to <em>perfecting</em> it. We'll explore how to handle missing values, eliminate duplicates, and clip outliers with single-function elegance.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

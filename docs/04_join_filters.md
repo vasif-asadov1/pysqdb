@@ -1,8 +1,8 @@
-# The `join` Function: High-Performance Table Merging
+## The `join` Function: High-Performance Table Merging
 
 Merging multiple massive datasets is often where data pipelines hit a performance bottleneck. The `join` function in `pysqdb` is designed to solve this by using **Pre-Selection Optimization**. Instead of joining full tables and then filtering columns, it filters columns *first* and then joins the smaller results in memory.
 
-## `ps.join(tables, join_type="inner", on=None, columns=None, create_table=False, create_view=True, return_df=False)`
+**`ps.join(tables, join_type="inner", on=None, columns=None, create_table=False, create_view=True, return_df=False)`**
 
 This function can chain together 2, 5, or even 10 tables in a single command, automatically generating optimized SQL under the hood.
 
@@ -22,9 +22,9 @@ This function can chain together 2, 5, or even 10 tables in a single command, au
 
 ---
 
-### **Pro Usage Examples**
+### **Usage Examples**
 
-#### **1. The "Zero-Copy" Triple Join**
+**1. The "Zero-Copy" Triple Join**
 
 Join three tables without wasting a single megabyte of RAM.
 
@@ -44,7 +44,7 @@ ps.join(
 
 ```
 
-#### **2. Optimized Column Selection (Memory Saver)**
+**2. Optimized Column Selection (Memory Saver)**
 
 If you only need 1 column from a table with 100 columns, `pysqdb` makes sure only that 1 column is processed.
 
@@ -61,7 +61,7 @@ ps.join(
 
 ```
 
-#### **3. Joining on Different Column Names**
+**3. Joining on Different Column Names**
 
 Sometimes keys don't match. No problem—use a tuple `(left_col, right_col)`.
 
@@ -82,7 +82,7 @@ ps.join(
 1. **Pandas Merge:** Pandas copies data at every step. If you join three 1GB tables, you might need 6GB of RAM. `pysqdb` uses DuckDB's streaming engine, which can join datasets larger than your RAM.
 2. **Standard SQL:** Writing a 3-way join with subqueries and column filters is tedious and prone to syntax errors. `pysqdb` writes the perfect, optimized query for you in one line.
 
-### **Pro Tip: Table vs. View**
+**Pro Tip: Table vs. View**
 
 * Use **`create_view=True`** for your daily analytics and exploration. It’s instant and uses zero resources.
 * Use **`create_table=True`** only when you’ve finalized your dataset and want to "freeze" it for heavy machine learning training.
@@ -90,11 +90,11 @@ ps.join(
 ---
 
 
-# The `filter` Function: Precision Data Slicing
+## The `filter` Function: Precision Data Slicing
 
 Data analysis is the art of asking the right questions. The `filter` function allows you to slice through massive datasets and keep only the rows that matter. Whether you are looking for specific dates, high-value transactions, or categorical segments, `sqpy` makes it as simple as passing a string or a list of conditions.
 
-## `ps.filter(table, criteria, create_table=None, create_view=None)`
+**`ps.filter(table, criteria, create_table=None, create_view=None)`**
 
 This function is designed for high-speed Exploratory Data Analysis (EDA). It always returns a Pandas DataFrame so you can immediately see your results, while giving you the option to persist your "slice" of data for later use.
 
@@ -111,9 +111,9 @@ This function is designed for high-speed Exploratory Data Analysis (EDA). It alw
 
 ---
 
-### **Pro Usage Examples**
+### **Usage Examples**
 
-#### **1. Simple String Filtering**
+**1. Simple String Filtering**
 
 Ideal for quick, single-condition queries.
 
@@ -125,7 +125,7 @@ high_rated_df = ps.filter("movies", "vote_average > 8.5")
 
 ```
 
-#### **2. Multi-Condition List Filtering (The Cleaner Way)**
+**2. Multi-Condition List Filtering (The Cleaner Way)**
 
 Instead of writing long strings with multiple `AND` keywords, just pass a clean list. `pysqdb` handles the formatting for you.
 
@@ -142,7 +142,7 @@ action_hits = ps.filter("movies", criteria, create_view="action_blockbusters")
 
 ```
 
-#### **3. Saving Slices for Production**
+**3. Saving Slices for Production**
 
 Once you find the perfect subset of data, "freeze" it into a new table for machine learning or reporting.
 
@@ -165,7 +165,7 @@ criteria_str = " AND ".join(f"({c})" for c in criteria)
 
 By wrapping each element in parentheses, `pysqdb` prevents logical errors that occur when mixing `AND` and `OR` conditions, ensuring your filters always behave exactly as expected.
 
-### **Pro Tip: Filter First, Join Later**
+### **Tip: Filter First, Join Later**
 
 In big data environments, performance is key.
 
@@ -181,7 +181,7 @@ The `join_filter` function is the most powerful tool in the `pysqdb` arsenal for
 
 By combining these operations, `pysqdb` can optimize the execution plan even further, ensuring that only the necessary rows and columns are processed throughout the entire pipeline.
 
-## `ps.join_filter(tables, on, join_type="inner", columns=None, criteria=None, create_table=None, create_view=None, return_df=True)`
+**`ps.join_filter(tables, on, join_type="inner", columns=None, criteria=None, create_table=None, create_view=None, return_df=True)`**
 
 ### Key Features
 
@@ -201,9 +201,9 @@ By combining these operations, `pysqdb` can optimize the execution plan even fur
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. The High-Speed Analytics Pipeline
+**1. The High-Speed Analytics Pipeline**
 
 Join your sales and product data, filter for a specific region, and get the results as a DataFrame instantly.
 
@@ -226,7 +226,7 @@ results_df = ps.join_filter(
 
 ```
 
-#### 2. Creating a Persisted View for Dashboards
+**2. Creating a Persisted View for Dashboards**
 
 You can join multiple tables and save the filtered result as a logical view, creating a clean "Gold Table" for your reporting tools.
 
@@ -269,7 +269,7 @@ The `filter_join` function is designed for maximum performance when dealing with
 
 By reducing the data size at the source, you minimize memory consumption and significantly accelerate the join process.
 
-## ps.filter_join(tables, on, join_type="inner", columns=None, criteria=None, create_table=None, create_view=None, return_df=True)
+**`ps.filter_join(tables, on, join_type="inner", columns=None, criteria=None, create_table=None, create_view=None, return_df=True)`** 
 
 ### Key Features
 
@@ -288,9 +288,9 @@ By reducing the data size at the source, you minimize memory consumption and sig
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. The "Slim-Join" Strategy
+**1. The "Slim-Join" Strategy**
 
 Instead of joining all sales with all products, we only join "high-value sales" with "Action-category products."
 
@@ -315,7 +315,7 @@ df = ps.filter_join(
 
 ```
 
-#### 2. Advanced Multi-Table Filtering
+**2. Advanced Multi-Table Filtering**
 
 Filter multiple tables with different logic and select only essential columns to keep the operation ultra-lean.
 

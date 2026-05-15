@@ -2,15 +2,15 @@
 
 The `Data Cleaning` pillar is where your raw, messy data gets transformed into a polished, analysis-ready asset. This section includes functions for handling missing values, outliers, duplicates, and even physical data ordering. Each function is designed to operate directly within the DuckDB engine, ensuring that you can clean datasets of any size without worrying about memory constraints.
 
-## The `impute` Function
+## Handle Missing Values (The `impute` Function)
 
 Missing data (NULLs) can bias your analysis and crash your machine learning models. The `impute` function provides an elegant, SQL-native way to fill these gaps using statistical measures or fixed constants.
 
 Unlike Pandas, which often creates a copy of the entire dataset in RAM, `pysqdb` performs an **In-Place Update** directly within the database. This means you can clean multi-gigabyte tables without breaking a sweat.
 
-## `ps.impute(table, column, method="mean", fixed_const=None, return_df=False)`
+**`ps.impute(table, column, method="mean", fixed_const=None, return_df=False)`**
 
-### **How it works:**
+### How it works:
 
 The function analyzes the column, calculates the requested statistic (mean, median, or mode), and runs a highly optimized `UPDATE` query to fill only the missing values.
 
@@ -30,9 +30,9 @@ The function analyzes the column, calculates the requested statistic (mean, medi
 
 ---
 
-### **Pro Usage Examples**
+### Usage Examples
 
-#### **1. Filling Numerical Gaps with the Average**
+**1. Filling Numerical Gaps with the Average**
 
 Perfect for columns like `age` or `price` where the mean is a safe statistical bet.
 
@@ -44,7 +44,7 @@ ps.impute(table="movies", column="budget", method="mean")
 
 ```
 
-#### **2. Handling Categorical Data with a Fixed Constant**
+**2. Handling Categorical Data with a Fixed Constant**
 
 When a value is missing in a category, you might want to label it as "Unknown".
 
@@ -58,7 +58,7 @@ ps.impute(table="movies",
 
 ```
 
-#### **3. Using the Mode (Most Frequent)**
+**3. Using the Mode (Most Frequent)**
 
 For features like `country` or `language`, using the most common value is often the best strategy.
 
@@ -79,7 +79,7 @@ ps.impute(table="movies", column="revenue", method="fixed_const", fixed_const="N
 ```
 
 
-### **Pro Tip: When to use `return_df=True`?**
+**Tip: When to use `return_df=True`?**
 
 In large production pipelines, keep `return_df=False` (default) to keep the memory footprint at zero. Use `return_df=True` only during EDA (Exploratory Data Analysis) in a Jupyter Notebook to see the results immediately.
 
@@ -87,15 +87,15 @@ In large production pipelines, keep `return_df=False` (default) to keep the memo
 
 
 
-# The `remove_outliers` Function: Precision Cleaning
+## Remove Outliers (The `remove_outliers` Function: Hard-Cleaning)
 
 Extreme values (outliers) can heavily distort your statistical averages and mislead your machine learning models. The `remove_outliers` function uses the industry-standard **IQR (Interquartile Range)** method to identify and surgically remove these anomalies directly from your SQL tables.
 
 By leveraging DuckDB's native quantile functions, `pysqdb` performs these complex calculations at blazing speeds without ever needing to load the full dataset into your computer's memory.
 
-## `ps.remove_outliers(table, columns, return_df=False)`
+**`ps.remove_outliers(table, columns, return_df=False)`**
 
-### **The Math Behind the Magic:**
+### The Math Behind the Magic:
 
 The function calculates the 25th percentile ($Q1$) and the 75th percentile ($Q3$) for each column. It then defines the "Normal Range" as:
 
@@ -103,7 +103,7 @@ The function calculates the 25th percentile ($Q1$) and the 75th percentile ($Q3$
 * **Upper Bound:** $Q3 + 1.5 \times IQR$
 Any data point outside these bounds is automatically deleted from the table.
 
-### **Parameters:**
+### Parameters:
 
 * **`table` (str):** The name of the table to clean.
 * **`columns` (str or list):** A single column name or a list of numerical columns to check.
@@ -111,9 +111,9 @@ Any data point outside these bounds is automatically deleted from the table.
 
 ---
 
-### **Pro Usage Examples**
+### Usage Examples
 
-#### **1. Cleaning a Single Column**
+**1. Cleaning a Single Column**
 
 Perfect for removing impossible values in columns like `price` or `delivery_time`.
 
@@ -125,7 +125,7 @@ ps.remove_outliers(table="sales", columns="revenue")
 
 ```
 
-#### **2. Batch Cleaning Multiple Features**
+**2. Batch Cleaning Multiple Features**
 
 You can clean an entire set of numerical features in one line. `pysqdb` will automatically skip any non-numerical columns you might have accidentally included and warn you about them.
 
@@ -135,7 +135,7 @@ ps.remove_outliers(table="movies", columns=["budget", "runtime", "popularity"])
 
 ```
 
-#### **3. Real-Time Inspection**
+**3. Real-Time Inspection**
 
 In a Jupyter Notebook, you might want to see how many rows are left after the cleanup.
 
@@ -148,14 +148,14 @@ print(f"Remaining rows: {len(clean_df)}")
 
 ---
 
-### **Smart Safeguards**
+### Smart Safeguards
 
 Your code isn't just fast; it's smart. It includes internal checks to prevent common errors:
 
 * **Categorical Detection:** If you pass a column containing text (like `movie_title`), `pysqdb` will issue a warning and skip it rather than crashing.
 * **Null Safety:** It automatically handles columns with missing values by ignoring `NULL` entries during the quantile calculation.
 
-### **Pro Tip: Use with Caution!**
+**Pro Tip: Use with Caution!**
 
 Outlier removal is a permanent `DELETE` operation in your database.
 
@@ -164,19 +164,19 @@ Outlier removal is a permanent `DELETE` operation in your database.
 ---
 
 
-# The `clip_outliers` Function: Soft-Cleaning (Winsorization)
+## Coerce Outliers (The `clip_outliers` Function): Soft-Cleaning (Winsorization)
 
 Sometimes, deleting data is too aggressive. When you want to keep all your rows but need to "tame" extreme values that skew your model, `clip_outliers` is your best friend.
 
 Instead of removing rows, this function **winsorizes** them: it sets values above the upper bound to the maximum "normal" value and values below the lower bound to the minimum "normal" value.
 
-## `ps.clip_outliers(table, columns, return_df=False)`
+**`ps.clip_outliers(table, columns, return_df=False)`**
 
-### **How it works:**
+### How it works:
 
 Using the **IQR method** ($Q1 - 1.5 \times IQR$ and $Q3 + 1.5 \times IQR$), `pysqdb` identifies the normal boundaries. It then uses a highly efficient SQL `UPDATE` combined with `LEAST` and `GREATEST` functions to compress extreme values into this range.
 
-### **Parameters:**
+### Parameters:
 
 * **`table` (str):** The table to be updated.
 * **`columns` (str or list):** The numerical column(s) to be clipped.
@@ -184,9 +184,9 @@ Using the **IQR method** ($Q1 - 1.5 \times IQR$ and $Q3 + 1.5 \times IQR$), `pys
 
 ---
 
-### **Pro Usage Examples**
+### Usage Examples
 
-#### **1. Preserving Data Size**
+**1. Preserving Data Size**
 
 If you have a small dataset and cannot afford to lose any rows, use `clip` instead of `remove`.
 
@@ -198,7 +198,7 @@ ps.clip_outliers(table="employees", columns="salary")
 
 ```
 
-#### **2. Preparing Features for Linear Models**
+**2. Preparing Features for Linear Models**
 
 Linear regression and many neural networks are sensitive to the magnitude of outliers. Clipping helps them converge faster and produce more stable coefficients.
 
@@ -208,7 +208,7 @@ ps.clip_outliers("housing_data", ["square_feet", "lot_size", "price"])
 
 ```
 
-#### **3. Handling Extreme Percentiles**
+**3. Handling Extreme Percentiles**
 
 Since this function updates the table **in-place**, it is incredibly memory-efficient for large-scale data preprocessing.
 
@@ -221,7 +221,7 @@ ps.give_info("sensor_readings")
 
 ---
 
-### **Technical Brilliance: The SQL Logic**
+**Technical Brilliance: The SQL Logic**
 
 Under the hood, `pysqdb` executes a sophisticated SQL update:
 
@@ -236,7 +236,7 @@ This ensures that:
 * Values **higher** than the bound are lowered to the `upper_bound`.
 * Values already in the **normal range** remain untouched.
 
-### **Pro Tip: When to "Remove" vs "Clip"?**
+**Pro Tip: When to "Remove" vs "Clip"?**
 
 * **Remove:** When the outliers are likely data entry errors or "noise" that shouldn't exist.
 * **Clip:** When the outliers are real data points but their extreme magnitude would negatively dominate your statistical model.
@@ -244,28 +244,28 @@ This ensures that:
 ---
 
 
-# The `show_duplicates` Function: The Data Detective
+## Check for Duplicates (The `show_duplicates` Function: Forensic Analysis)
 
 Before you delete data, you need to see it. While standard tools often provide a simple count of duplicates, `show_duplicates` performs a deep forensic analysis of your table. It identifies **every single occurrence** of identical rows, groups them together, and labels them so you can understand exactly where your data pipeline is leaking.
 
 By using DuckDB’s advanced window functions and the `QUALIFY` clause, `pysqdb` identifies duplicates across all columns simultaneously without the need for complex self-joins.
 
-## `ps.show_duplicates(table)`
+**`ps.show_duplicates(table)`**
 
 ### **How it works:**
 
 The function partitions the data by **every single column** in your table. It then calculates a dynamic `_duplicate_count` for each row. If a row appears more than once, it is captured and displayed alongside its "twins."
 
-### **What it returns:**
+**What it returns:**
 
 * **`pandas.DataFrame`:** A dataframe containing only the rows that have at least one exact duplicate.
 * **`_duplicate_count`:** A temporary column added to the result showing how many times that specific row exists in the original table.
 
 ---
 
-### **Pro Usage Examples**
+### Usage Examples
 
-#### **1. Identifying Data Integrity Issues**
+**1. Identifying Data Integrity Issues**
 
 Perfect for checking if a data ingestion script accidentally ran twice or if a join operation created a "Cartesian product" mess.
 
@@ -283,7 +283,7 @@ print(duplicates_df.head(10))
 
 ```
 
-#### **2. Quick Sanity Check Before Analysis**
+**2. Quick Sanity Check Before Analysis**
 
 Use this as a gatekeeper function. If `show_duplicates` returns an empty dataframe, you know your dataset is unique and ready for modeling.
 
@@ -318,13 +318,13 @@ This is significantly more efficient than the traditional SQL method (which requ
 
 
 
-# The `remove_duplicates` Function: Final Table Sanitization
+## The `remove_duplicates` Function: Final Table Sanitization
 
 After inspecting your data with `show_duplicates`, it’s time to take action. The `remove_duplicates` function is designed to permanently clean your tables by eliminating redundant data.
 
 Whether you want to keep exactly one copy of every record or completely wipe out any row that has a "twin," `pysqdb` handles the operation directly within the database engine for maximum performance.
 
-## `ps.remove_duplicates(table, keep_first=False, keep_last=False, return_df=False)`
+**`ps.remove_duplicates(table, keep_first=False, keep_last=False, return_df=False)`**
 
 ### **The Two Cleaning Strategies:**
 
@@ -339,9 +339,9 @@ Whether you want to keep exactly one copy of every record or completely wipe out
 
 ---
 
-### **Pro Usage Examples**
+### **Usage Examples**
 
-#### **1. The Standard Cleanup (DISTINCT)**
+**1. The Standard Cleanup (DISTINCT)**
 
 The most common use case: you have some redundant rows due to multiple data imports and you want a clean, unique table.
 
@@ -353,7 +353,7 @@ ps.remove_duplicates(table="customers", keep_first=True)
 
 ```
 
-#### **2. The Strict Cleanup (Keep Only Truly Unique Rows)**
+**2. The Strict Cleanup (Keep Only Truly Unique Rows)**
 
 Use this when duplicates are considered "errors" and you don't trust any version of a duplicated row.
 
@@ -364,7 +364,7 @@ ps.remove_duplicates(table="transactions", keep_first=False)
 
 ```
 
-#### **3. Clean and Inspect**
+**3. Clean and Inspect**
 
 Verify your row count immediately after the cleanup.
 
@@ -388,18 +388,6 @@ CREATE OR REPLACE TABLE table AS SELECT DISTINCT * FROM table
 
 By recreating the table within DuckDB, we avoid the overhead of individual `DELETE` statements. This "Bulk-Update" approach is significantly faster and results in a more compressed, optimized database file on your disk.
 
-### **Conclusion: Data Cleaning Checklist**
-
-Now that you've mastered the Cleaning Pillar, your typical workflow should look like this:
-
-1. **`give_info()`**: Spot the NULLs and outliers.
-2. **`impute()`**: Fill the missing gaps.
-3. **`clip_outliers()` / `remove_outliers()`**: Tame the extreme values.
-4. **`show_duplicates()`**: Inspect for redundancies.
-5. **`remove_duplicates()`**: Finalize and seal the table.
-
----
-
 
 ## The sort_table Function: Physical Data Ordering
 
@@ -407,7 +395,7 @@ In data analysis, order matters. Whether you are preparing a dataset for time-se
 
 Unlike temporary sorting in a DataFrame, `sqpy` re-organizes the data physically within the DuckDB engine. This ensures that any subsequent query, view, or export will respect the new sorted order without needing to re-apply the logic.
 
-## `sp.sort_table(table, by, ascending=True, return_df=False)`
+**`sp.sort_table(table, by, ascending=True, return_df=False)`**
 
 ### Key Features
 
@@ -425,9 +413,9 @@ Unlike temporary sorting in a DataFrame, `sqpy` re-organizes the data physically
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. Sorting by a Single Column (Chronological Order)
+**1. Sorting by a Single Column (Chronological Order)**
 
 Re-order your logs so that the most recent events appear at the end of the table.
 
@@ -441,7 +429,7 @@ ps.sort_table(table="logs", by="timestamp", ascending=True)
 
 ```
 
-#### 2. Advanced Multi-Level Sorting
+**2. Advanced Multi-Level Sorting**
 
 Sort a product catalog first by category (ascending) and then by price (descending) to find the most expensive items in each group.
 
@@ -456,7 +444,7 @@ ps.sort_table(
 
 ```
 
-#### 3. Preparing Data for Reporting
+**3. Preparing Data for Reporting**
 
 Physically sort your sales data before exporting it to ensure the final CSV or Excel file is perfectly organized for your stakeholders.
 
@@ -468,7 +456,7 @@ ps.export_table("quarterly_sales", "csv", file_name="sales_report_2024")
 
 ---
 
-### Why use sort_table instead of just SQL ORDER BY?
+**Why use sort_table instead of just SQL ORDER BY?**
 
 1. **Efficiency:** By physically sorting the table, you pay the performance cost once. Future operations like filtering or window functions can often run faster on ordered data.
 2. **Simplified Workflow:** You don't need to append an `ORDER BY` clause to every single analysis script; the database "remembers" the correct order.
@@ -479,13 +467,13 @@ ps.export_table("quarterly_sales", "csv", file_name="sales_report_2024")
 
 ---
 
-## The remove_columns Function: Streamlining Your Schema
+## The `remove_columns` Function: Streamlining Your Schema
 
 As your analysis progresses, you often find yourself with redundant or unnecessary columns that clutter your workspace and consume memory. The `remove_columns` function is designed to surgically remove these elements from your tables or views.
 
 It leverages DuckDB’s advanced `SELECT * EXCLUDE` logic, allowing you to drop specific columns without the need to manually list every other column you wish to keep.
 
-## `ps.remove_columns(target, columns, new_name=None, return_df=False)`
+**`ps.remove_columns(target, columns, new_name=None, return_df=False)`**
 
 ### Key Features
 
@@ -503,9 +491,9 @@ It leverages DuckDB’s advanced `SELECT * EXCLUDE` logic, allowing you to drop 
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. Dropping Sensitive Data In-Place
+**1. Dropping Sensitive Data In-Place**
 
 Quickly remove columns like `email` or `phone_number` from a physical table to ensure data privacy before sharing the database.
 
@@ -519,7 +507,7 @@ ps.remove_columns(target="users", columns=["email", "phone_hash"])
 
 ```
 
-#### 2. Refining a View for Visualization
+**2. Refining a View for Visualization**
 
 Create a cleaner version of an existing view by excluding technical metadata columns that aren't needed for your dashboard.
 
@@ -533,7 +521,7 @@ ps.remove_columns(
 
 ```
 
-#### 3. Batch Removal with Schema Inspection
+**3. Batch Removal with Schema Inspection**
 
 Remove multiple columns at once and immediately verify the remaining schema.
 
@@ -562,13 +550,13 @@ print(df_remaining.columns)
 
 
 
-## The remove_rows Function: Targetted Data Elimination
+## The `remove_rows` Function: Targetted Data Elimination
 
 While filtering is used to select data you want to keep, `remove_rows` is designed for the surgical removal of data you want to discard. Whether you are purging test records, deleting canceled orders, or removing data that falls outside of a specific timeframe, this function handles the operation with precision and speed.
 
 It automatically handles the logic reversal for you: when you provide the removal criteria, `pysqdb` ensures that only the remaining data is preserved in your tables or views.
 
-## `ps.remove_rows(target, criteria, new_name=None, return_df=False)`
+**`ps.remove_rows(target, criteria, new_name=None, return_df=False)`**
 
 ### Key Features
 
@@ -586,9 +574,9 @@ It automatically handles the logic reversal for you: when you provide the remova
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. Cleaning Up Transactional Errors
+**1. Cleaning Up Transactional Errors**
 
 Quickly remove records that were created by mistake or during system testing.
 
@@ -602,7 +590,7 @@ ps.remove_rows(target="transactions", criteria="status == 'test_entry'")
 
 ```
 
-#### 2. Creating a Clean View without Outdated Data
+**2. Creating a Clean View without Outdated Data**
 
 Instead of deleting history, create a new view that only shows active data by removing records from previous years.
 
@@ -616,7 +604,7 @@ ps.remove_rows(
 
 ```
 
-#### 3. Batch Removal with Multiple Conditions
+**3. Batch Removal with Multiple Conditions**
 
 Combine several rules to wipe out irrelevant data points in one command.
 
@@ -645,13 +633,13 @@ ps.remove_rows(
 
 ---
 
-## The rename_columns Function: Multi-Table Schema Alignment
+## The `rename_columns` Function: Multi-Table Schema Alignment
 
 In large projects, maintaining consistent column names across different tables is vital for clean joins and readable code. The `rename_columns` function allows you to perform bulk renaming operations across multiple physical tables in a single command.
 
 It is designed with maximum flexibility in mind, accepting various input formats and automatically validating your database schema to prevent accidental errors on logical views.
 
-## ps.rename_columns(operations)
+**ps.rename_columns(operations)**
 
 ### Key Features
 
@@ -666,9 +654,9 @@ It is designed with maximum flexibility in mind, accepting various input formats
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. Standardizing IDs Across Tables
+**1. Standardizing IDs Across Tables**
 
 Ensure that your primary keys follow a consistent naming convention across your entire database.
 
@@ -686,7 +674,7 @@ ps.rename_columns({
 
 ```
 
-#### 2. Multi-Column Renaming in a Single Table
+**2. Multi-Column Renaming in a Single Table**
 
 Use a dictionary mapping to update several column names for a specific table in one go.
 
@@ -702,7 +690,7 @@ ps.rename_columns({
 
 ```
 
-#### 3. Handling List-of-Lists Format
+**3. Handling List-of-Lists Format**
 
 If your renaming rules are generated dynamically, `pysqdb` can handle lists of pairs effortlessly.
 
@@ -732,7 +720,7 @@ As projects grow, your naming conventions might evolve. What started as `raw_dat
 
 It automatically detects the asset type and applies the correct SQL logic, ensuring your database remains organized and your table names stay meaningful.
 
-## `ps.rename_tables(operations)`
+**`ps.rename_tables(operations)`**
 
 ### Key Features
 
@@ -747,9 +735,9 @@ It automatically detects the asset type and applies the correct SQL logic, ensur
 
 ---
 
-### Pro Usage Examples
+### Usage Examples
 
-#### 1. Batch Versioning
+**1. Batch Versioning**
 
 Quickly transition your production tables to a new versioning scheme.
 
@@ -767,7 +755,7 @@ ps.rename_tables({
 
 ```
 
-#### 2. Cleaning Up Temporary Assets
+**2. Cleaning Up Temporary Assets**
 
 Rename your experimental or temporary tables to a standardized "archive" format.
 
